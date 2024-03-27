@@ -1,0 +1,80 @@
+  .bg {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: url('../../assets/images/bg1.jpg');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+  }
+
+  .el-form-item.role>.el-form-item__content {
+    text-align: left;
+  }
+
+  #login {
+    width: 400px;
+    height: 540px;
+    right: 139px;
+    top: 55%;
+    margin-top: -340px;
+    box-shadow: 0 2px 12px 0 rgba(255, 255, 255, .9);
+    /* ; */
+    background: #ffffff;
+    /* opacity: 0.85; */
+    position: absolute;
+    /* text-align: center; */
+    display: flex;
+    flex-direction: column;
+    /* 横向 */
+    padding: 30px;
+    border-radius: 12px;
+    justify-content: space-between;
+  }
+
+  .btn1 {
+    margin: auto;
+    width: 336px;
+    height: 48px;
+    background: #4e6ef2;
+    border-radius: 10px;
+    box-shadow: 0 6px 16px 0 rgb(78 111 242 / 30%);
+    font-size: 17px;
+    font-weight: 800;
+    border: 0;
+    color: #fff;
+    cursor: pointer;
+  }
+
+  .btn2 {
+    margin: 10px auto;
+    width: 336px;
+    height: 48px;
+    background: #4e6ef2;
+    border-radius: 10px;
+    box-shadow: 0 6px 16px 0 rgb(78 111 242 / 30%);
+    font-size: 17px;
+    font-weight: 800;
+    border: 0;
+    color: #fff;
+    cursor: pointer;
+  }
+
+  .reg {
+    color: red;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    cursor: pointer;
+  }
+
+  #f {
+    margin: 13%;
+  }
+
+  .logo {
+    position: absolute;
+    top: 80px;
+    left: 30px;
+  }

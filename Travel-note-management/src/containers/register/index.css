@@ -1,0 +1,45 @@
+.bg {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: url('../../../assets/images/bg1.jpg');
+  background-size: 100% 100%;
+  background-repeat: no-repeat
+}
+
+#register {
+  width: 400px;
+  height: 400px;
+  right: 139px;
+  top: 35%;
+  margin-top: -200px;
+  box-shadow: 0 2px 12px 0 rgba(255, 255, 255, .9);
+  ;
+  background: #ffffff;
+  opacity: 0.85;
+  position: absolute;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  /*横向*/
+  padding: 30px;
+  border-radius: 12px;
+  justify-content: space-between;
+}
+
+#register h2 {
+  padding-bottom: 30px;
+}
+
+.btn {
+  width: 47%;
+  margin: auto;
+}
+
+.logo {
+  position: absolute;
+  top: 80px;
+  left: 30px;
+}
