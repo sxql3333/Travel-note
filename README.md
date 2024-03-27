@@ -1,0 +1,2 @@
+server是后端文件夹
+Travel-note-management是管理系统
