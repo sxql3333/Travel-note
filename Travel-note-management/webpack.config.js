@@ -48,5 +48,20 @@ module.exports = {
   devServer: {
     static: path.join(__dirname, 'dist'),
     port: 3000,
-  },
+    // proxy: [{
+    //   '/api': {
+    //     target: 'http://localhost:5000', // 设置目标服务器的地址
+    //     secure: false, // 如果目标服务器是https，需要将secure设置为false
+    //     changeOrigin: true // 设置changeOrigin为true，以便正确处理跨域请求
+    //   }
+    // }]
+    // proxy: [
+    //   {
+    //     context: ['/api'],
+    //     target: 'http://127.0.0.1:5000', // 设置目标服务器的地址
+    //     secure: false, // 如果目标服务器是https，需要将secure设置为false
+    //     changeOrigin: true // 设置changeOrigin为true，以便正确处理跨域请求
+    //   }
+    // ]
+  }
 };

@@ -1,5 +1,5 @@
-import ajax from './ajax'
+import request from './request'
 // 请求注册
-export const reqRegister = (user) => ajax('/register', user, 'POST')
+export const reqRegister = (user) => request('/register', user, 'POST')
 // 请求登陆
-export const reqLogin = (user) => ajax('/login', user, 'POST')
+export const reqLogin = (user) => request('/login', user, 'POST')
