@@ -6,22 +6,12 @@ import { useNavigate } from 'react-router-dom';
 import { reqLogin, reqRegister } from '../../api';
 import register from '../register'
 import home from '../home';
+import './index.less'
+import { connect } from 'react-redux'; // 添加 Redux 的 connect
+import { handleLogin } from './actions'; // 导入 handleLogin action creator
 
 const LoginForm = () => {
   // const [loading, setLoading] = useState(false);
-
-  // const onFinish = (values) => {
-  //   setLoading(true);
-  //   // Simulate API call
-  //   setTimeout(() => {
-  //     setLoading(false);
-  //     if (values.username === 'admin' && values.password === 'password') {
-  //       message.success('Login successful');
-  //     } else {
-  //       message.error('Login failed');
-  //     }
-  //   }, 2000);
-  // };
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [value, setValue] = useState(1);
@@ -40,36 +30,26 @@ const LoginForm = () => {
   };
 
   // 定义登录事件函数
-const handleLogin = async () => {
-  try {
+  const handleLoginSubmit = (event) => {
+    event.preventDefault();
+
     // 构建用户信息对象
     const user = {
-      name: username,
+      username: username,
       password: password,
-      auth: value
+      auth: value,
     };
-    console.log(user);
-    // 发送登录请求
-    const response = await reqLogin(user);
-    console.log(response);
-    // 处理登录请求的响应结果
-    if (response.status === 200) {
-      // 登录成功
-      message.success('登录成功');
-      // 跳转到首页
-      navigate('/home');
-    } 
-  } catch (error) {
-    // 处理登录请求的错误
-    console.error('登录失败:', error);
-  }
-};
+    console.log("user", user);
+
+    // 调用 handleLogin action creator
+    handleLogin(user);
+  };
 
   return (
     <div className="bg">
       <div id="login">
         <div className="title">
-          <span>Login</span>
+          <span>登录</span>
         </div>
         {/* <Form name="loginForm" onFinish={onFinish}> */}
         <Form name="loginForm">
@@ -99,7 +79,7 @@ const handleLogin = async () => {
           </Form.Item>
           <Form.Item>
             {/* <Button type="primary" htmlType="submit" loading={loading} className="btn1"> */}
-            <Button type="primary" htmlType="submit" className="btn1" onClick={handleLogin}>
+            <Button type="primary" htmlType="submit" className="btn1" onClick={handleLoginSubmit}>
               登录
             </Button>
             <Button type="primary" className="btn2" >

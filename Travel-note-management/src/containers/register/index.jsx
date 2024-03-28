@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { Form, Input, Button, message } from 'antd';
 import { Link } from 'react-router-dom';
 import './index.css'
-import { reqLogin, reqRegister } from '../../api';
+import { connect } from 'react-redux'; // 添加 Redux 的 connect
+import { handleRegistration } from './actions'; // 导入 handleRegister action creator
 
 const RegisterForm = () => {
   // const [loading, setLoading] = useState(false);
@@ -45,23 +46,15 @@ const RegisterForm = () => {
     setValue(e.target.value);
   };
 
-const handleRegistration = async() => {
+const handleRegister = async() => {
   console.log("进入注册函数");
-  try{
-    // 在这里执行注册逻辑
     // 构建用户信息对象
     const user = {
       name: username,
       password: password,
-      auth: value
     };
     console.log(user);
-    const response = await reqRegister(user);
-    console.log(response);
-    }catch(error){
-      //处理注册失败的错误
-      console.error('注册失败:', error);
-    }
+    handleRegistration(user);
   };
   return (
       <div className="bg">
@@ -83,7 +76,7 @@ const handleRegistration = async() => {
             </Form.Item>
   
             <Form.Item>
-              <Button className='btn' type="primary" htmlType="submit" style={{ marginRight: '10px' }} onClick={handleRegistration}>
+              <Button className='btn' type="primary" htmlType="submit" style={{ marginRight: '10px' }} onClick={handleRegister}>
                 注册
               </Button>
               <Link to="/login">返回登录</Link>

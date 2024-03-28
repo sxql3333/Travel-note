@@ -5,7 +5,7 @@ import { AppstoreOutline, MessageFill, TeamFill } from 'antd-mobile-icons'
 import NavFooter from '../../components/nav-footer'
 import { useNavigate } from 'react-router-dom'
 import { Button } from 'antd';
-// import store from '../../redux/store'
+import store from '../../redux/store'
 import login from '../login'
 import register from '../register'
 import { Link } from 'react-router-dom';
@@ -46,7 +46,9 @@ export default function Home() {
   // const navabar = navList.find(obj => obj.path === path)
   // const currentNav = navList.find(obj => obj.path === path)
   // const { type } = user
-
+  // const addNewNote = () => {
+  //   store.dispatch({type:'ADD_NOTE'})
+  // }
   return (
     // <>
     //   {navabar ? <NavBar back={null} className="navbar">{navabar.title}</NavBar> : null}
@@ -62,6 +64,7 @@ export default function Home() {
     <Button>
       <Link to="/register">注册</Link>
     </Button>
+    <Button type="primary" style={{ marginLeft: '10px' }} >新建</Button>
   </div>
 
   )

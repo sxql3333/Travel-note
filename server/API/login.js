@@ -7,12 +7,12 @@ exports.login = async (req, res) => {
   console.log("进入登录函数");
     try {
       console.log(req.body);
-      const name = req.body.name;
+      const name = req.body.username;
       const password = req.body.password;
       const auth = req.body.auth;
   
       const user = await UserModel.findOne({ name: name });
-  
+      
       if (!user) {
         return res.send({
           status: 401,
