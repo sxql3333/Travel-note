@@ -4,12 +4,15 @@ const UserModel = require('../model/UserModel');
 const jwt = require('jsonwebtoken');
 
 exports.login = async (req, res) => {
+  console.log("进入登录函数");
     try {
-      const name = req.body.name;
+      console.log(req.body);
+      const name = req.body.username;
       const password = req.body.password;
+      const auth = req.body.auth;
   
       const user = await UserModel.findOne({ name: name });
-  
+      
       if (!user) {
         return res.send({
           status: 401,
@@ -18,21 +21,23 @@ exports.login = async (req, res) => {
       }
   
       if (user.password === password) {
-        const token = jwt.sign({ userId: user._id }, 'your-secret-key', { expiresIn: '1h' });
+        if(user.auth === auth) {
+          const token = jwt.sign({ userId: user._id }, 'your-secret-key', { expiresIn: '1h' });
+          return res.send({
+            status: 200,
+            message: '登录成功',
+            data: {
+              user: user,
+              token: token
+            }
+          });
+        }
+      }else{
         return res.send({
-          status: 200,
-          message: '登录成功',
-          data: {
-            user: user,
-            token: token
-          }
+          status: 402,
+          message: '密码错误或权限不一致'
         });
       }
-  
-      return res.send({
-        status: 402,
-        message: '密码错误'
-      });
     } catch (err) {
       console.log(err);
       return res.send({
@@ -43,6 +48,7 @@ exports.login = async (req, res) => {
   };
 
   exports.register = async (req, res) => {
+    console.log("进入登录函数");
     try {
       const name = req.body.name;
       const password = req.body.password;

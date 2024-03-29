@@ -1,6 +1,7 @@
 const { MongoClient } = require('mongodb');
 const conn= require('../db');
-const TaskModel = require('../model/TaskModel');
+const TaskModel = require('../model/TravelModel');
+
 
 exports.gettask = async (req, res) => {
     try {
