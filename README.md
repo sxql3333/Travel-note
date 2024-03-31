@@ -1,7 +1,22 @@
 # 项目目录
 
-server---后端文件夹
-Travel-note-management---管理系统
+* server---后端文件夹
+  * 启动方式：
+    ```
+    cd server
+    node app.js/npm start
+    ```
+* Travel-note-management---管理系统
+  * 启动方式
+    ```
+    cd Travel-note-management
+    npm start
+    ```
+* TravelApp---旅行日记App端
+  * 启动方式
+  * ```
+    npm start
+    ```
 
 数据库设计
 

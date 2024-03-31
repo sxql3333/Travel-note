@@ -2,7 +2,7 @@ import {combineReducers} from "redux"
 
 import {
   LOGIN_SUCCESS,
-}from "./action-types"
+}from "./actionTypes"
 
 const initUser={
   username: "",
