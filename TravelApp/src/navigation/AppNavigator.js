@@ -8,6 +8,7 @@ import DiaryList from "../pages/diaryList";
 import Home from "../pages/home";
 import Mine from "../pages/mine";
 import AddDiary from "../pages/addDiary";
+import DiaryDetail from "../pages/diaryDetails";
 
 const Stack = createNativeStackNavigator();
 const AppNavigator = () => {
@@ -23,6 +24,7 @@ const AppNavigator = () => {
                 <Stack.Screen name="Mine" component={Mine} />
                 <Stack.Screen name="DiaryList" component={DiaryList} />
                 <Stack.Screen name="AddDiary" component={AddDiary} />
+                <Stack.Screen name="DiaryDetail" component={DiaryDetail}/>
             </Stack.Navigator>
         </NavigationContainer>
     );

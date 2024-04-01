@@ -5,7 +5,9 @@ export const listData = [
 		image: require("../../../assets/pic1.jpg"),
 		nickname: "爱旅游的橙子",
 		avatar: require("../../../assets/avatar1.jpg"),
+    content: "上海3/29 西岸樱花盛开 上海3/29 西岸樱花盛开,上海3/29 西岸樱花盛开 上海3/29 西岸樱花盛开啦啦啦啦啦",
 		count:222,
+    commentnum:160
 	},
 	{
 		id: "02",
@@ -13,6 +15,7 @@ export const listData = [
 		image: require("../../../assets/pic2.jpg"),
 		nickname: "爱旅游的橙子",
 		avatar: require("../../../assets/avatar2.jpg"),
+    content: "上海3/29 西岸樱花盛开 上海3/29 西岸樱花盛开,上海3/29 西岸樱花盛开 上海3/29 西岸樱花盛开啦啦啦啦啦",
 		count:351,
 	},
 	{
@@ -21,6 +24,7 @@ export const listData = [
 		image: require("../../../assets/pic3.jpg"),
 		nickname: "爱旅游的橙子",
 		avatar: require("../../../assets/avatar1.jpg"),
+    content: "上海3/29 西岸樱花盛开 上海3/29 西岸樱花盛开,上海3/29 西岸樱花盛开 上海3/29 西岸樱花盛开啦啦啦啦啦",
 		count:666,
 	},
 	{
@@ -29,6 +33,7 @@ export const listData = [
 		image: require("../../../assets/pic4.jpg"),
 		nickname: "爱旅游的橙子",
 		avatar: require("../../../assets/avatar2.jpg"),
+    content: "上海3/29 西岸樱花盛开 上海3/29 西岸樱花盛开,上海3/29 西岸樱花盛开 上海3/29 西岸樱花盛开啦啦啦啦啦",
 		count:351,
 	},
 	{

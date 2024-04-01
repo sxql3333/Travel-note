@@ -4,16 +4,16 @@ import { colors, listData } from "../utils/data";
 import { FontAwesome } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { Avatar } from '@rneui/themed';
-
+import DiaryDetail from "../../diaryDetails";
 const DiaryCard = () => {
-	// const navigation = useNavigation();
+	const navigation = useNavigation();
 	return (
 		<View>
 			<FlatList
 				data={listData}
 				renderItem={({ item }) => (
 					<Pressable
-						// onPress={() => navigation.navigate("RecipeDetail", { item: item })}
+            onPress={() => navigation.navigate("DiaryDetail", { item: item })}
 						style={styles.cardContainer}
 					>
 						<Image
