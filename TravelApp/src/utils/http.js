@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-// const baseURL = "http://localhost:5000"; 
+const baseURL = "http://localhost:5000"; 
 //创建一个全局的axios实例
 const httpClient = axios.create({ baseURL, timeout: 10000 });
 

@@ -8,4 +8,8 @@ router.post('/register', login.register)
 // router.get('/task', task.gettask)
 // router.post('/task', task.addtask)
 // router.delete('/task/:id', task.deletetask)
+
+
+// app端
+// router.post('/app/login', login.appLogin)
 module.exports = router

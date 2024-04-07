@@ -2,7 +2,8 @@ import { useState,useRef } from 'react';
 import { Text, View,  StyleSheet,  TouchableWithoutFeedback, Keyboard,TouchableOpacity,Image } from 'react-native';
 import { Button,Input,Icon } from "@rneui/themed";
 import { Colors } from '../../utils/theme';
-
+import { LoginApi } from '../../api/login';
+import { showToast } from '../../components/Toast';
 const Login = ({ navigation }) => {
     const [name, setname] = useState("");
     const [pwd, setpwd] = useState("");
@@ -16,7 +17,29 @@ const Login = ({ navigation }) => {
     // setPlaceholder('');
     setIsFocusedUser(true);
   };
-
+  const onLogin = () => {
+    // if (name === "") {
+    //   showToast("请输入用户名", 330, {
+    //   });
+    // }else if (pwd === "") {
+    //   showToast("请输入用户名", 330, {
+    //   });
+    // } else {
+      LoginApi(name, pwd)
+      .then((res) => {
+        console.log(res);
+        navigation.navigate("Home");
+      })
+      .catch((err) => {
+        console.log("err",err);
+      })
+      .finally(() => {
+        // navigation.navigate("Home")
+    });
+    // }
+    
+    
+  };
   const handleBlur = () => {
     setIsFocusedUser(false);
   };
@@ -154,7 +177,7 @@ const Login = ({ navigation }) => {
                     </TouchableOpacity>
                 </View>
                 
-                <Button  containerStyle={styles.loginButton} title="登录" onPress={() => navigation.navigate("Home")} />
+                <Button  containerStyle={styles.loginButton} title="登录" onPress={onLogin} />
                 <View
                   style={{
                     flexDirection: 'row',
