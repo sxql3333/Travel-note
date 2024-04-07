@@ -1,18 +1,35 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Image, TouchableOpacity,Text, View, StyleSheet } from 'react-native';
+import { Alert,Image, TouchableOpacity,Text, View, StyleSheet } from 'react-native';
 import { Colors, Sizes } from '../utils/theme';
+import { clearUserToken } from '../utils/auth';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useNavigation } from "@react-navigation/native";
+// import {navigateResetTo}  from "../navigation/routeNav";
 import DiaryList from "./diaryList";
 import Mine from "./mine";
+import AddDiary from './addDiary';
 import { Icon } from '@rneui/themed';
 
 const Tab = createBottomTabNavigator();
 
 
 const Home = () => {
-
+  const navigation = useNavigation();
   const insets = useSafeAreaInsets();
+  const showConfirmAlert = () =>
+    Alert.alert('', '确定要退出登录吗?', [
+      {
+        text:  '取消',
+        style: 'cancel',
+      },
+      { text: '确定', onPress: () => handleLogout(), style: 'destructive' },
+    ]);
+    const handleLogout = () => {
+      clearUserToken().then();
+      // logout();
+      navigation.navigate('Login');
+    };
   return (
     <Tab.Navigator
       screenOptions={() => ({
@@ -46,10 +63,27 @@ const Home = () => {
             const source = focused
               ? require('../assets/tabs/icon_overview_focus.png')
               : require('../assets/tabs/icon_overview_normal.png');
-            return <Image source={source} style={Sizes.tabs} />;
+              return <Image source={source} style={Sizes.tabs} />;
+            
           },
         })}
       />
+      <Tab.Screen
+        name="AddDiary"
+        component={AddDiary}
+        options={() => ({
+          title: '添加',
+          headerShown: true,
+          tabBarIcon: ({ focused }) => {
+            const color = focused
+              ? '#2F6CE0'
+              : '';
+            return(
+            <Icon name='add-circle-outline' type='ionicon' color={color} size={24} style={Sizes.tabs} />
+      );
+          },
+        })}
+        />
       <Tab.Screen
         name="Mine"
         component={Mine}
@@ -65,11 +99,11 @@ const Home = () => {
               headerRight: () => (
                 <TouchableOpacity style={{ marginRight: 16 }}
                   hitSlop={{ top: 16, bottom: 16, left: 16, right: 16 }}
-                  onPress={() => navigation.navigate('AddDiary')}
+                  onPress={showConfirmAlert}
                 >
                       <View style={styles.add}>
-                          <Icon name="plus" type="antdesign" size={15} color={Colors.primary}/>
-                          <Text style={styles.addText}>新增</Text>
+                          <Icon name="settings-outline" type="ionicon" size={15} color={Colors.primary}/>
+                          <Text style={styles.addText}>退出</Text>
                       </View>
                   
                 </TouchableOpacity>

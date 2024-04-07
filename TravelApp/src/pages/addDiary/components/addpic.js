@@ -32,7 +32,7 @@ const Addpic = () => {
         })
     }
     return (
-        <View>
+        <View >
             <Button title="启动图库选择图像" onPress={() => addPhoto()}></Button>
             <Button title="启动图库选择视频" onPress={() => addVideo()}></Button>
             <Button title="启动相机拍摄图片" onPress={() => tackPhoto()}></Button>

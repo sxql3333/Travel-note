@@ -15,7 +15,7 @@ const AppNavigator = () => {
     return (
         <NavigationContainer>
             <Stack.Navigator
-                screenOptions={{ headerShow: false,headerStyle: { backgroundColor:'#fff'} }}
+                screenOptions={{ headerShow: false, headerStyle: { backgroundColor: '#fff' } }}
             >
                 {/* 页面声明 */}
                 <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
