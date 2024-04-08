@@ -1,7 +1,7 @@
 import { useState,useRef } from 'react';
 import { Text, View,  StyleSheet,  TouchableWithoutFeedback, Keyboard,TouchableOpacity,Image } from 'react-native';
 import { Button,Input,Icon } from "@rneui/themed";
-import { Colors } from '../../utils/theme';
+import { Colors } from '@/utils/theme';
 
 const Login = ({ navigation }) => {
   const [name, setname] = useState("");

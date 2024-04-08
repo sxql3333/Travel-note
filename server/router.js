@@ -12,5 +12,5 @@ router.get('/getAllData', travel.getAllData)
 
 
 // app端
-// router.post('/app/login', login.appLogin)
+router.post('/app/login', login.appLogin)
 module.exports = router
