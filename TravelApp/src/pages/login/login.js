@@ -200,7 +200,7 @@ const Login = ({ navigation }) => {
                       name={iconName}
                       size={15}
                       type={'font-awesome'}
-                      color={checked ? Colors.primary : 'rgba(255, 255, 255, 0.9)'}
+                      color={checked ? Colors.primary : 'rgba(0,0,0, 0.2)'}
                     />
                    
                   </TouchableOpacity>

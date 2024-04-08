@@ -80,3 +80,43 @@ exports.login = async (req, res) => {
       });
     }
 };
+exports.appLogin = async (req, res) => {
+  console.log("进入aa登录函数");
+    try {
+      console.log(req.body);
+      const name = req.body.username;
+      const password = req.body.password;
+  
+      const user = await UserModel.findOne({ name: name });
+      
+      if (!user) {
+        return res.send({
+          status: 401,
+          message: '用户名不存在'
+        });
+      }
+  
+      if (user.password === password) {
+          const token = jwt.sign({ userId: user._id }, 'your-secret-key', { expiresIn: '1h' });
+          return res.send({
+            status: 200,
+            message: '登录成功',
+            data: {
+              user: user,
+              token: token
+            }
+          });
+      }else{
+        return res.send({
+          status: 402,
+          message: '密码错误或权限不一致'
+        });
+      }
+    } catch (err) {
+      console.log(err);
+      return res.send({
+        status: 400,
+        message: '查询用户失败'
+      });
+    }
+};

@@ -8,6 +8,6 @@ router.post('/register', login.register)
 router.get('/getAllData', travel.getAllData)
 
 // app端
-// router.post('/app/login', login.appLogin)
+router.post('/app/login', login.appLogin)
 router.post('/getDataByName', travel.getDataByName)
 module.exports = router
