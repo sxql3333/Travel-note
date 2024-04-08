@@ -31,7 +31,8 @@ const Login = ({ navigation }) => {
         navigation.navigate("Home");
       })
       .catch((err) => {
-        console.log("err",err);
+        console.error(err)
+        console.log("登录失败");
       })
       .finally(() => {
         // navigation.navigate("Home")

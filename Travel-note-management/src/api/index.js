@@ -3,3 +3,5 @@ import request from './request'
 export const reqRegister = (user) => request('/register', user, 'POST')
 // 请求登陆
 export const reqLogin = (user) => request('/login', user, 'POST')
+// 获取所有游记数据
+export const reqAllData = () => request('/getAllData', 'GET')

@@ -3,11 +3,14 @@ const mongoose = require('mongoose');
 let TravelSchema = mongoose.Schema({
     _id: String,
     title: String,
+    image: [String], 
     content: String,
-    images: [String], 
-    created_time: Date,
-    is_approved: Boolean,
+    count: Number,
+    commentnum: Number,
+    // created_time: Date,
     views: Number,
-    user_id: String
+    is_approved: Number, // 是否通过
+    user_id: String,
+
 })
 module.exports = TravelSchema;
