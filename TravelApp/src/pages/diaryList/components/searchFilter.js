@@ -1,15 +1,41 @@
-import { StyleSheet, Text, TextInput, View } from "react-native";
-import React from "react";
+import { StyleSheet, Text, TextInput, View, TouchableOpacity,Button } from "react-native";
+import React, { useState } from 'react';
 import { FontAwesome } from "@expo/vector-icons";
+import { post } from "../../../utils/http";
 
 const SearchFilter = ({ icon, placeholder }) => {
+  const [searchText, setSearchText] = useState('');
+
+  const handleSearch = (text) => {
+    //构造请求体并发送请求
+    const requestBody = {
+      searchText: text
+    };
+    post('/getDataByName', requestBody)
+      .then((response) => {
+        console.log('搜索结果:', response.data);
+      })
+      .catch((error) => {
+        console.error('搜索请求出错:', error);
+      });
+    
+  };
 	return (
 		<View
 			style={styles.container}
 		>
 			<FontAwesome name={icon} size={20} color="#f96163" />
-			<TextInput style={{ paddingLeft: 8, fontSize: 16, color: "#808080" }} placeholder={placeholder}>
+			<TextInput 
+      style={{ paddingLeft: 8, fontSize: 16, color: "#808080" }} 
+      placeholder={placeholder}
+      onChangeText={setSearchText}
+      value={searchText}
+      onSubmitEditing={() => handleSearch(searchText)}
+      >
 			</TextInput>
+      <TouchableOpacity onPress={() => handleSearch(searchText)} style={styles.searchButton}>
+        <Text style={styles.searchButtonText}>搜索</Text>
+      </TouchableOpacity>
 		</View>
 	);
 };

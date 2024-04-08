@@ -2,7 +2,7 @@ const { MongoClient } = require('mongodb');
 const conn= require('../db');
 const TravelModel = require('../model/TravelModel');
 
-//获取所有游记
+//web端获取所有游记
 exports.getAllData = async (req, res) => {
     try {
       const notes = await TravelModel.find();
@@ -19,6 +19,32 @@ exports.getAllData = async (req, res) => {
       })
     }
 }
+//App端根据游记标题或者用户名获取游记卡片内容
+exports.getDataByName = async (req, res) => {
+  console.log("111111111111111");
+  try {
+    console.log(req.body);
+    const name= req.body.searchText;
+    const notes = await TravelModel.find({
+      $or: [
+        { username: { $regex: name, $options: 'i' } },
+        { title: { $regex: name, $options: 'i' } }
+      ]
+    });
+
+    return res.send({
+      status: 200,
+      message: '查询成功',
+      data: notes
+    });
+  } catch (err) {
+    console.log(err);
+    return res.send({
+      status: 400,
+      message: '查询失败'
+    });
+  }
+};
 // exports.addtask = async (req, res) => {
 //     try {
 //       const title = req.body.title;
