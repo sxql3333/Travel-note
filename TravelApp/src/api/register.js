@@ -1,8 +1,8 @@
 import http from '../utils/http';
 
-export const LoginApi = async (name, pwd) => {
+export const RegisterApi = async (name, pwd) => {
     try {
-        return await http.post('app/login', {
+        return await http.post('app/register', {
             username: name,
             password: pwd,
         });

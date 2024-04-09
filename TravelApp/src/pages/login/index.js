@@ -1,27 +1,58 @@
 import { useState,useRef } from 'react';
 import { Text, View,  StyleSheet,  TouchableWithoutFeedback, Keyboard,TouchableOpacity,Image } from 'react-native';
 import { Button,Input,Icon } from "@rneui/themed";
-import { Colors } from '@/utils/theme';
-
+import { Colors } from '../../utils/theme';
+import { LoginApi } from '../../api/login';
+import { showToast } from '../../components/Toast';
+import UserIdentityUtil from '@/utils/userIdentityUtil';
 const Login = ({ navigation }) => {
-  const [name, setname] = useState("");
-  const [pwd, setpwd] = useState("");
-  const [repwd, setrepwd] = useState("");
+    const [name, setname] = useState("");
+    const [pwd, setpwd] = useState("");
   const pwdInputRef = useRef(null);
-  const repwdInputRef = useRef(null);
   const nameInputRef = useRef(null);
   const [isFocusedUser, setIsFocusedUser] = useState(false);
   const [isFocusedpwd, setIsFocusedpwd] = useState(false);
-  const [isFocusedrepwd, setIsFocusedrepwd] = useState(false);
   const [watch, setWatch] = useState(false);
-  const [rewatch, setreWatch] = useState(false);
   const toggleWatch = () => setWatch(!watch);
-  const togglereWatch = () => setreWatch(!rewatch);
   const handleFocus = () => {
     // setPlaceholder('');
     setIsFocusedUser(true);
   };
-
+  const onLogin = () => {
+    if (name === "") {
+      showToast("请输入用户名", 330, {
+      });
+    }else if (pwd === "") {
+      showToast("请输入密码", 330, {
+      });
+    } else if (checked===false) {
+      showToast("请阅读并同意用户协议", 330, {
+      });
+    } else {
+      LoginApi(name, pwd)
+        .then((res) => {
+          console.log("res", res);
+          if (res?.data?.token) {
+            UserIdentityUtil.saveUserInfoWithTokenOnLoginOrChangeIdentity().then(() => {
+              navigation.navigate("Home");
+            })
+          }
+        // if (res.code === 200) {
+        //    navigation.navigate("Home");
+        // }
+       
+      })
+      .catch((err) => {
+        showToast(err?.message || "网络错误", 330, {
+        });
+      })
+      .finally(() => {
+        // navigation.navigate("Home")
+    });
+    }
+    
+    
+  };
   const handleBlur = () => {
     setIsFocusedUser(false);
   };
@@ -29,10 +60,6 @@ const Login = ({ navigation }) => {
         setpwd('');
         pwdInputRef.current?.clear();
   };
-  const handleClearrePwd = () => {
-    setrepwd('');
-    repwdInputRef.current?.clear();
-};
   const handleClearText = () => {
     setname('');
     nameInputRef.current?.clear();
@@ -42,62 +69,65 @@ const Login = ({ navigation }) => {
     const iconName = checked ? 'check-circle' : 'circle';
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View style={styles.container}>
-            <View style={styles.title}>
-              <Text style={styles.titleText}>注册</Text>
-            </View>
-            <View style={[styles.inputContainer, { 
-                  marginTop: 32,
-                  borderBottomColor: isFocusedUser ? 'rgba(51, 51, 51, 1)' : 'rgba(0, 0, 0, 0.08)',
-                },
-              ]}>
-              
-              <View
-                style={styles.inputsubContainer}>
+            <View style={styles.container}>
+                <View style={styles.title}>
+                    <Text style={styles.subtitle}>小巷子</Text>
+                    <Text style={styles.description}>你的旅游指南</Text>
+          </View>
+          <View style={[styles.inputContainer, { 
+                    marginTop: 32,
+                    borderBottomColor: isFocusedUser ? 'rgba(51, 51, 51, 1)' : 'rgba(0, 0, 0, 0.08)',
+                  },
+                ]}>
+                
                 <View
-                  style={styles.inputViewStyle}>
-                  <Input
-                    ref={nameInputRef}
-                    value={name}
-                    multiline={false}
-                    importantForAutofill={'yes'}
-                    textContentType={'name'}
-                    containerStyle={styles.inputContainerStyle}
-                    inputContainerStyle={{ borderBottomWidth: 0 }}
-                    underlineColorAndroid={'transparent'}
-                    inputStyle={[
-                      styles.input,
-                      {
-                        letterSpacing: name.length ? 1 : 0,
-                        backgroundColor: 'transparent',
-                        padding: 0,
-                        margin: 0,
-                        fontSize: name?.length ? 20 : 14,
-                        lineHeight: name?.length ? 24 : 16,
-                        color: name?.length ? '#333' : 'rgba(51, 51, 51, 0.5)',
-                        textAlign: 'left',
-                        borderBottomColor: 'rgba(255,255,255,255)',
-                        // fontWeight: '700',
-                        paddingVertical: 0,
-                      },
-                    ]}
-                    onChangeText={setname}
-                    placeholder="用户名"
-                    placeholderTextColor={'rgba(51, 51, 51, 0.5)'}
-                    maxLength={ 11}
-                    onFocus={handleFocus}
-                    onBlur={handleBlur}
-                  />
+                  style={styles.inputsubContainer}>
+                  <View
+                    style={styles.inputViewStyle}>
+                    <Input
+                      ref={nameInputRef}
+                      value={name}
+                      multiline={false}
+                      importantForAutofill={'yes'}
+                      textContentType={'name'}
+                      containerStyle={styles.inputContainerStyle}
+                      inputContainerStyle={{ borderBottomWidth: 0 }}
+                      underlineColorAndroid={'transparent'}
+                      inputStyle={[
+                        styles.input,
+                        {
+                          letterSpacing: name.length ? 1 : 0,
+                          backgroundColor: 'transparent',
+                          padding: 0,
+                          margin: 0,
+                          fontSize: name?.length ? 20 : 14,
+                          lineHeight: name?.length ? 24 : 16,
+                          color: name?.length ? '#333' : 'rgba(51, 51, 51, 0.5)',
+                          textAlign: 'left',
+                          borderBottomColor: 'rgba(255,255,255,255)',
+                          // fontWeight: '700',
+                          paddingVertical: 0,
+                        },
+                      ]}
+                      onChangeText={setname}
+                      placeholder="用户名"
+                      placeholderTextColor={'rgba(51, 51, 51, 0.5)'}
+                      maxLength={ 11}
+                      onFocus={handleFocus}
+                      onBlur={handleBlur}
+                    />
+                  </View>
                 </View>
-              </View>
 
-              {name.length > 0 && isFocusedUser && (
-                <TouchableOpacity onPress={handleClearText} style={{ paddingBottom: 7 }}>
-                  <Image source={require('../../assets/close.png')} style={{ width: 14, height: 14 }} />
-                </TouchableOpacity>
-              )}
-          </View> 
+                {name.length > 0 && isFocusedUser && (
+                  <TouchableOpacity onPress={handleClearText} style={{ paddingBottom: 7 }}>
+                    <Image source={require('../../assets/close.png')} style={{ width: 14, height: 14 }} />
+                  </TouchableOpacity>
+                )}
+              </View>
+                
           <View style={[styles.inputContainer, {
+              marginBottom: 20,
               marginTop: 32,
               borderBottomColor: isFocusedpwd ? 'rgba(51, 51, 51, 1)' : 'rgba(0, 0, 0, 0.08)',
             },
@@ -153,65 +183,14 @@ const Login = ({ navigation }) => {
           )}
           </TouchableOpacity>
             </View>
-          <View style={[styles.inputContainer, {
-                            marginBottom: 20,
-              marginTop: 32,
-              borderBottomColor: isFocusedrepwd ? 'rgba(51, 51, 51, 1)' : 'rgba(0, 0, 0, 0.08)',
-            },
-          ]}>
-            <View style={styles.inputsubContainer}>
-              <View style={styles.inputViewStyle}>
-                <Input
-                      ref={repwdInputRef}
-                      value={repwd}
-                      multiline={false}
-                      importantForAutofill={'yes'}
-                      containerStyle={styles.inputContainerStyle}
-                      inputContainerStyle={{ borderBottomWidth: 0 }}
-                      underlineColorAndroid={'transparent'}
-                      inputStyle={[
-                        styles.input,
-                        {
-                          letterSpacing: repwd.length ? 1 : 0,
-                          backgroundColor: 'transparent',
-                          padding: 0,
-                          margin: 0,
-                          fontSize: repwd?.length ? 20 : 14,
-                          lineHeight: repwd?.length ? 24 : 16,
-                          color: repwd?.length ? '#333' : 'rgba(51, 51, 51, 0.5)',
-                          textAlign: 'left',
-                          borderBottomColor: 'rgba(255,255,255,255)',
-                          paddingVertical: 0,
-                        },
-                  ]}
-                      secureTextEntry={!rewatch}
-                      onChangeText={setrepwd}
-                      placeholder="再次输入密码"
-                      placeholderTextColor={'rgba(51, 51, 51, 0.5)'}
-                      onFocus={() => setIsFocusedrepwd(true)}
-                      onBlur={() => setIsFocusedrepwd(false)}
-                    />
-              </View>
-            </View>
-            {repwd.length > 0 && isFocusedrepwd &&  (
-                  <TouchableOpacity onPress={handleClearrePwd} style={{  paddingBottom: 7 }}>
-                    <Image source={require('../../assets/close.png')} style={{ width: 14, height: 14 }} />
-                  </TouchableOpacity>
-            )}
-            <TouchableOpacity
-              style={{ paddingBottom: 4 ,paddingLeft:20}}
-              hitSlop={{ left: 5, right: 24, top: 12, bottom: 12 }}
-              activeOpacity={0.8}
-              onPress={togglereWatch}>
-          {rewatch ? (
-            <Image source={require('../../assets/eye.png')} style={{ width: 18, height: 18 }} />
-          ) : (
-            <Image source={require('../../assets/eyeSlash.png')} style={{ width: 18, height: 18 }} />
-          )}
-          </TouchableOpacity>
-            </View>
-
-                <Button  containerStyle={styles.loginButton} title="注册" onPress={() => navigation.navigate("DiaryList")} />
+                
+                <View style={{alignItems:'flex-end'}}>
+                    <TouchableOpacity>
+                        <Text style={{color:'#2F6CE0'}}>忘记密码</Text>
+                    </TouchableOpacity>
+                </View>
+                
+                <Button  containerStyle={styles.loginButton} title="登录" onPress={onLogin} />
                 <View
                   style={{
                     flexDirection: 'row',
@@ -233,7 +212,7 @@ const Login = ({ navigation }) => {
                       name={iconName}
                       size={15}
                       type={'font-awesome'}
-                      color={checked ? Colors.primary : 'rgba(255, 255, 255, 0.9)'}
+                      color={checked ? Colors.primary : 'rgba(0,0,0, 0.2)'}
                     />
                    
                   </TouchableOpacity>
@@ -251,16 +230,17 @@ const Login = ({ navigation }) => {
                     <Text style={{ color: Colors.title, fontSize: 12, fontWeight: '700' }}>隐私协议</Text>
                   </TouchableOpacity>
           </View>
+          <TouchableOpacity onPress={() => navigation.navigate("Register")} style={styles.register}><Text style={ styles.registerText}>注册</Text></TouchableOpacity>
             </View>
         </TouchableWithoutFeedback>
     )
 }
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    paddingTop: 80,
-    paddingHorizontal:20,
+        flex: 1,
+        backgroundColor: '#fff',
+        paddingTop: 150,
+        paddingHorizontal:20,
   },
   inputContainer: {
     marginHorizontal:10,
@@ -297,11 +277,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
     title: {
-        marginBottom:20,
-  },
-  titleText: {
-    fontSize: 30,
-    fontWeight: '700',
+        alignItems: 'center',
+        marginBottom:80,
     },
     subtitle: {
         fontSize: 40,
