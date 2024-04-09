@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TextInput, View, TouchableOpacity,Button } from "react-native";
+import { StyleSheet, Text, TextInput, View, TouchableOpacity,Button, DeviceEventEmitter } from "react-native";
 import React, { useState } from 'react';
 import { FontAwesome } from "@expo/vector-icons";
 import { post } from "../../../utils/http";
@@ -7,13 +7,16 @@ const SearchFilter = ({ icon, placeholder }) => {
   const [searchText, setSearchText] = useState('');
 
   const handleSearch = (text) => {
+    console.log("进入搜索逻辑");
     //构造请求体并发送请求
     const requestBody = {
       searchText: text
     };
     post('/getDataByName', requestBody)
       .then((response) => {
-        console.log('搜索结果:', response.data);
+        // 发送事件，传递响应数据
+        console.log("搜索成功");
+        DeviceEventEmitter.emit('searchResults', response.data);
       })
       .catch((error) => {
         console.error('搜索请求出错:', error);

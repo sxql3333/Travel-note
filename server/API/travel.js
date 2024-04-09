@@ -31,6 +31,7 @@ exports.getDataByName = async (req, res) => {
         { title: { $regex: name, $options: 'i' } }
       ]
     });
+    console.log(notes)
 
     return res.send({
       status: 200,

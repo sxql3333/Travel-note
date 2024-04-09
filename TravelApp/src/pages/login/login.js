@@ -18,23 +18,17 @@ const Login = ({ navigation }) => {
     setIsFocusedUser(true);
   };
   const onLogin = () => {
-    // if (name === "") {
-    //   showToast("请输入用户名", 330, {
-    //   });
-    // }else if (pwd === "") {
-    //   showToast("请输入用户名", 330, {
-    //   });
-    // } else {
-      LoginApi(name, pwd)
-      .then((res) => {
-        console.log(res);
-        navigation.navigate("Home");
-      })
-      .catch((err) => {
-        console.error(err)
-        console.log("登录失败");
-      })
-      .finally(() => {
+       console.log("调用后端发请求的函数")
+       LoginApi(name, pwd)
+       .then((res) => {
+         console.log(res);
+         navigation.navigate("Home");
+       })
+       .catch((err) => {
+         console.error(err)
+         console.log("登录失败");
+       })
+       .finally(() => {
         // navigation.navigate("Home")
     });
     // }

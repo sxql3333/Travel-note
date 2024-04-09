@@ -1,14 +1,30 @@
-import React from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, Image, StyleSheet, TouchableOpacity, TextInput, TouchableWithoutFeedback } from 'react-native';
 import { colors } from '../diaryList/utils/data';
-import { FontAwesome } from '@expo/vector-icons';
+import { FontAwesome, Ionicons } from '@expo/vector-icons';
+import { Share } from 'react-native';
+
 
 const DiaryDetail = ({ route, navigation }) => {
+  console.log ("组件重新渲染")
   const { item } = route.params;
+  const [isFollowed, setIsFollowed] = useState(false);
 
   const handleFollow = () => {
     // 添加关注的逻辑
+    console.log("关注成功");
+    setIsFollowed(true);
   };
+  useEffect(() => {
+    console.log("isFollowed 更新:", isFollowed);
+  }, [isFollowed]);
+  function handleShare() {
+    // 执行分享逻辑
+    // 例如，使用React Native的Share组件来实现分享功能
+    Share.share({
+      message: '分享内容',
+    });
+  }
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: () => (
@@ -18,10 +34,15 @@ const DiaryDetail = ({ route, navigation }) => {
         </View>
       ),
       headerRight: () => (
-        <TouchableOpacity style={styles.followButton} onPress={handleFollow}>
-          <Text style={styles.followButtonText}>+关注</Text>
-        </TouchableOpacity>
-      ),
+      <View>
+      <TouchableOpacity style={styles.followButton} onPress={handleFollow}>
+        <Text style={styles.followButtonText}>{isFollowed ? "已关注" : "+关注"}</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.followButton} onPress={handleShare}>
+        <Text style={styles.followButtonText}>分享</Text>
+      </TouchableOpacity>
+      </View>
+      )
     });
   }, [navigation, item]);
 
