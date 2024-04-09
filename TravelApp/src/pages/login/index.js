@@ -19,6 +19,7 @@ const Login = ({ navigation }) => {
     setIsFocusedUser(true);
   };
   const onLogin = () => {
+    navigation.navigate("Home");
     if (name === "") {
       showToast("请输入用户名", 330, {
       });

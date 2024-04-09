@@ -5,18 +5,19 @@ import { Input } from "@rneui/themed";
 import Addpic from "./components/add";
 import { useNavigation } from "@react-navigation/native";
 import { showToast } from '../../components/Toast';
-
+import { AddDiaryApi } from '@/api/addDiary';
 const AddDiary = () => {
   const Navigation = useNavigation();
+  const [images, setImages] = useState([]);
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
   const titleInputRef = useRef(null);
   const textInputRef = useRef(null);
   const [isFocused, setIsFocused] = useState(false);
   const [isFocusedText, setIsFocusedText] = useState(false);
-  const [images, setImages] = useState([]);
 
-  const postNotes = () => {
+
+  const postNotes = async() => {
     if (images.length === 0) {
       showToast('请添加图片', 330, {
         fontSize: 12,
@@ -44,10 +45,22 @@ const AddDiary = () => {
       textInputRef.current.focus();
       return;
     } else {
-      Navigation.navigate('Mine');
-      setImages([]);
-      setTitle("");
-      setText("");
+      try {
+        const res = await AddDiaryApi(images, title, text,"apple");
+        console.log(res);
+        Navigation.navigate('Mine');
+        setImages([]);
+        setTitle("");
+        setText("");
+      } catch {
+        showToast('添加失败', 330, {
+          fontSize: 12,
+          fontWeight: '500',
+          borderRadius: 8,
+          paddingHorizontal: 16,
+        });
+      }
+      
     }
     
   };
@@ -55,6 +68,7 @@ const AddDiary = () => {
       <View style={{ padding: 10, backgroundColor: "#fff", height: '100%',justifyContent:'space-between' }}>
         <View>
           <Addpic images={images} setImages={setImages}/>
+          {/* <Addpic/> */}
           <View style={[styles.inputContainer, {
               marginBottom: 20,
               marginTop: 32,
