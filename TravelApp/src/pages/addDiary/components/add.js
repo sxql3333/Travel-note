@@ -3,7 +3,7 @@ import { Image, View, Text, Button, StyleSheet, ScrollView, TouchableOpacity } f
 import { Icon } from '@rneui/themed';
 import * as ImagePicker from 'expo-image-picker';
  
-const Add = ({ images, setImages, onImagePick }) => {
+const Add = ({ images, setImages }) => {
   // const [images, setImages] = useState([]);
   useEffect(() => {
     (async () => {
@@ -17,7 +17,7 @@ const Add = ({ images, setImages, onImagePick }) => {
  
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
@@ -29,6 +29,7 @@ const Add = ({ images, setImages, onImagePick }) => {
     if (!result.cancelled && result.assets) {
       // 设置选择的图片
       setImages([...images, ...result.assets.map(asset => asset.uri)]);
+      console.log(images);
       // 上传图片的逻辑
       // uploadImage(result.assets[0].uri);
      
@@ -65,7 +66,7 @@ const Add = ({ images, setImages, onImagePick }) => {
     <View >
       <View style={styles.container}>
         <ScrollView horizontal={true}>
-        {!images &&images?.map((uri, index) => (
+        {images &&images?.map((uri, index) => (
           <Image key={index} source={{ uri: uri }} style={styles.imageStyle} resizeMode="contain"/>
         ))}
           <TouchableOpacity onPress={pickImage}>

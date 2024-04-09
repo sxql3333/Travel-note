@@ -2,8 +2,8 @@ import { StyleSheet, Text, View } from "react-native";
 import React  from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Login from "../pages/login/login";
-import Register from "../pages/register/register";
+import Login from "../pages/login/index";
+import Register from "../pages/register/index";
 import DiaryList from "../pages/diaryList";
 import Home from "../pages/home";
 import Mine from "../pages/mine";
@@ -19,7 +19,7 @@ const AppNavigator = () => {
             >
                 {/* 页面声明 */}
                 <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
-                <Stack.Screen name="Register" component={Register} />
+                <Stack.Screen name="Register" component={Register} options={{ title: '注册'  }}/>
                 <Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/>
                 <Stack.Screen name="Mine" component={Mine} />
                 <Stack.Screen name="DiaryList" component={DiaryList} />

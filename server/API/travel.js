@@ -88,3 +88,33 @@ exports.getDataByName = async (req, res) => {
 //       });
 //     }
 // }
+// App端添加游记
+exports.addDiary = async (req, res) => {
+  try {
+    console.log(req.body);
+    const title = req.body.title;
+    const content = req.body.content;
+    const name = req.body.name;
+    const image = req.body.image;
+    const newDiary = new TravelModel({
+      _id: Date.now(),
+      title: title,
+      image: image,
+      content: content,
+      name: name
+    });
+    await newDiary.save();
+    return res.send({
+      status: 200,
+      message: '添加成功',
+      data: newDiary
+    });
+  } catch (err) {
+    console.log(err);
+    return res.send({
+      status: 400,
+      message: '添加失败'
+    }
+    );
+  }
+}

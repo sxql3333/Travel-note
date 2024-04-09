@@ -9,5 +9,8 @@ router.get('/getAllData', travel.getAllData)
 
 // app端
 router.post('/app/login', login.appLogin)
+router.post('/app/register', login.appRegister)
 router.post('/getDataByName', travel.getDataByName)
+router.post('/app/addDiary', travel.addDiary)
+
 module.exports = router
