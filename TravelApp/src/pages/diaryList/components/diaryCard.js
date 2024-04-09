@@ -33,10 +33,10 @@ const DiaryCard = () => {
             onPress={() => navigation.navigate("DiaryDetail", { item: item })}
 						style={styles.cardContainer}
 					>
-						{/* <Image
+						<Image
 							source={item.image}
 							style={{ width: '100%', height: 200, resizeMode: "stretch",borderRadius: 16 }}
-						/> */}
+						/>
 						<View style={{paddingHorizontal:5}}>
 							<Text  numberOfLines={2} style={ styles.title}>{item.title}</Text>
 							<View style={{ flexDirection: "row", marginTop: 8,marginBottom:3,alignItems:'center',justifyContent:'space-between' }}>
