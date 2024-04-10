@@ -126,14 +126,18 @@ exports.addDiary = async (req, res) => {
     console.log(req.body);
     const title = req.body.title;
     const content = req.body.content;
+    const id = req.body.id;
     const name = req.body.name;
     const image = req.body.image;
+    const is_approved = req.body.is_approved;
     const newDiary = new TravelModel({
       _id: Date.now(),
       title: title,
       image: image,
       content: content,
-      name: name
+      user_id: id,
+      name: name,
+      is_approved: is_approved
     });
     await newDiary.save();
     return res.send({
@@ -148,5 +152,24 @@ exports.addDiary = async (req, res) => {
       message: '添加失败'
     }
     );
+  }
+}
+// App端根据id获取游记
+exports.getDiaryById = async (req, res) => {
+  try {
+    console.log(req.body);
+    const id = req.body.user_id;
+    const diary = await TravelModel.find({ user_id: id });
+    return res.send({
+      status: 200,
+      message: '查询成功',
+      data: diary
+    })
+  } catch (err) {
+    console.log(err);
+    return res.send({
+      status: 400,
+      message: '查询失败'
+    });
   }
 }

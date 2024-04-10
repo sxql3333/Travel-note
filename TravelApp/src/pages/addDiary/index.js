@@ -6,11 +6,15 @@ import Addpic from "./components/add";
 import { useNavigation } from "@react-navigation/native";
 import { showToast } from '../../components/Toast';
 import { AddDiaryApi } from '@/api/addDiary';
+import { useSelector } from 'react-redux';
 const AddDiary = () => {
   const Navigation = useNavigation();
+  const userUInfo = useSelector((state) => state.userInfo);
   const [images, setImages] = useState([]);
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
+  const [is_approved, setIs_approved] = useState(0);
+  
   const titleInputRef = useRef(null);
   const textInputRef = useRef(null);
   const [isFocused, setIsFocused] = useState(false);
@@ -46,13 +50,14 @@ const AddDiary = () => {
       return;
     } else {
       try {
-        const res = await AddDiaryApi(images, title, text,"apple");
+        const res = await AddDiaryApi(images, title, text, userUInfo.user._id, userUInfo.user.name,is_approved);
         console.log(res);
         Navigation.navigate('Mine');
         setImages([]);
         setTitle("");
         setText("");
       } catch {
+        console.error(error);
         showToast('添加失败', 330, {
           fontSize: 12,
           fontWeight: '500',

@@ -1,15 +1,25 @@
 import {FlatList,StyleSheet,Text,View,Image,Pressable,Dimensions} from "react-native";
-import React,{useState} from "react";
+import React,{useEffect, useState} from "react";
 import { Button,Tab,TabView } from '@rneui/themed';
 import { colors, listData } from "../utils/data";
 import { FontAwesome } from "@expo/vector-icons";
 import Colors from "../../../utils/theme";
 import { useNavigation } from "@react-navigation/native";
 import { Avatar } from '@rneui/themed';
+import { useSelector } from "react-redux";
+import { getPersonalDiaryApi } from "../../../api/getPersonalDiary";
 
 const myDiary = () => {
 	// const navigation = useNavigation();
+  const userInfo = useSelector(state => state.userInfo);
 	const [index,setIndex] = useState(0);
+  const [personalDiary, setPersonalDiary] = useState([]);
+  useEffect(() => {
+    getPersonalDiaryApi(userInfo.user._id).then((res) => {
+      console.log("根据id获取到的游记",res.data);
+      setPersonalDiary(res.data);
+    });
+  }, [userInfo.user.id]);
 	const truncatedTitle = (title) => { 
 		return title.length > 20 ? title.substring(0, 20) + '...' : title;
 	} 
@@ -29,25 +39,33 @@ const myDiary = () => {
 				<TabView.Item style={[styles.tabView,{width:Dimensions.get('window').width}]}>
 					<View>
 					<FlatList
-						data={listData}
+						// data={listData}
+            data={personalDiary}
 						renderItem={({ item }) => (
 							<Pressable
 								// onPress={() => navigation.navigate("RecipeDetail", { item: item })}
+                key={item._id} // 添加 key 属性
 								style={styles.cardContainer}
 							>
 								<View style={{flexDirection:'row'}}>
-									<Image
+									{/* <Image
 										source={item.image}
 										style={{ width: '30%', height: 100, resizeMode: "stretch" }}
-									/>
+									/> */}
 									<View style={{marginHorizontal:16,flex:1}}>
 										<Text  style={styles.title}>{truncatedTitle(item.title)}</Text>
-										<Text>{truncatedDescription(item.description)}</Text>
+										{/* <Text>{truncatedDescription(item.description)}</Text> */}
+                    <Text>{truncatedDescription(item.content)}</Text>
 									</View>
 								</View>
 								
 								<View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',marginTop:16,marginHorizontal:6}}>
-									<Button title="已通过" color="green"  containerStyle={ {borderRadius:5}}/>
+									{/* <Button title="已通过" color="green"  containerStyle={ {borderRadius:5}}/> */}
+                  <Button
+                    title={item.is_Approved ? '已通过' : '未通过'}
+                    color={item.is_Approved ? 'green' : 'red'}
+                    containerStyle={{ borderRadius: 5 }}
+                  />
 									<View style={{flexDirection:'row',alignItems:'center'}}>
 										<Button title="编辑" containerStyle={ {marginRight:10,borderRadius:5}} />
 										<Button title="删除" containerStyle={ {borderRadius:5}} />

@@ -5,15 +5,19 @@ import { Colors } from '../../utils/theme';
 import { LoginApi } from '../../api/login';
 import { showToast } from '../../components/Toast';
 import UserIdentityUtil from '@/utils/userIdentityUtil';
+import { useDispatch } from 'react-redux';
+import { saveUserInfo } from '../../redux/action';
 const Login = ({ navigation }) => {
-    const [name, setname] = useState("");
-    const [pwd, setpwd] = useState("");
+  const dispatch = useDispatch();
+  const [name, setname] = useState("");
+  const [pwd, setpwd] = useState("");
   const pwdInputRef = useRef(null);
   const nameInputRef = useRef(null);
   const [isFocusedUser, setIsFocusedUser] = useState(false);
   const [isFocusedpwd, setIsFocusedpwd] = useState(false);
   const [watch, setWatch] = useState(false);
   const toggleWatch = () => setWatch(!watch);
+
   const handleFocus = () => {
     // setPlaceholder('');
     setIsFocusedUser(true);
@@ -30,25 +34,41 @@ const Login = ({ navigation }) => {
       showToast("请阅读并同意用户协议", 330, {
       });
     } else {
-      LoginApi(name, pwd)
-        .then((res) => {
-          console.log("res", res);
-          if (res?.data?.token) {
-            UserIdentityUtil.saveUserInfoWithTokenOnLoginOrChangeIdentity().then(() => {
-              navigation.navigate("Home");
-            })
-          }
-        // if (res.code === 200) {
-        //    navigation.navigate("Home");
-        // }
+    //   LoginApi(name, pwd)
+    //     .then((res) => {
+    //       console.log("res", res);
+    //       if (res?.data?.token) {
+    //         UserIdentityUtil.saveUserInfoWithTokenOnLoginOrChangeIdentity().then(() => {
+    //           navigation.navigate("Home");
+    //         })
+    //       }
+    //     // if (res.code === 200) {
+    //     //    navigation.navigate("Home");
+    //     // }
        
-      })
-      .catch((err) => {
-        showToast(err?.message || "网络错误", 330, {
+    //   })
+    //   .catch((err) => {
+    //     showToast(err?.message || "网络错误", 330, {
+    //     });
+    //   })
+    //   .finally(() => {
+    //     // navigation.navigate("Home")
+    // });
+    LoginApi(name, pwd)
+    .then((res) => {
+      console.log("res", res);
+      if (res?.data?.token) {
+        UserIdentityUtil.saveUserInfoWithTokenOnLoginOrChangeIdentity().then(() => {
+          dispatch(saveUserInfo(res.data.user, res.data.token)); // 派发action，保存用户信息到store
+          navigation.navigate("Home");
         });
-      })
-      .finally(() => {
-        // navigation.navigate("Home")
+      }
+    })
+    .catch((err) => {
+      showToast(err?.message || "网络错误", 330, {});
+    })
+    .finally(() => {
+      // 其他逻辑...
     });
     }
     

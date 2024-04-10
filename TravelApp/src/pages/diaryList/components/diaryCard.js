@@ -10,20 +10,6 @@ const DiaryCard = () => {
 	const navigation = useNavigation();
   const searchResults = useSelector(state => state.searchResults);
   console.log("searchResultsaaaa",searchResults);
-  // const [searchResults, setSearchResults] = useState([]);
-
-  // const handleSearchResults = (response) => {
-  //   console.log('Received search results:', response.data);
-  //   setSearchResults(response.data);
-  // };
-
-  // useEffect(() => {
-  //   const subscription = DeviceEventEmitter.addListener('searchResults', handleSearchResults);
-
-  //   return () => {
-  //     subscription.remove();
-  //   };
-  // }, [searchResults]);
 
 	return (
 		<View>

@@ -7,24 +7,6 @@ import { setSearchResults } from '../../../redux/action';
 
 const SearchFilter = ({ icon, placeholder }) => {
   const [searchText, setSearchText] = useState('');
-
-  // const handleSearch = (text) => {
-  //   console.log("进入搜索逻辑");
-  //   //构造请求体并发送请求
-  //   const requestBody = {
-  //     searchText: text
-  //   };
-  //   post('/getDataByName', requestBody)
-  //     .then((response) => {
-  //       // 发送事件，传递响应数据
-  //       console.log("搜索成功", response.data);
-  //       DeviceEventEmitter.emit('searchResults', response.data);
-  //     })
-  //     .catch((error) => {
-  //       console.error('搜索请求出错:', error);
-  //     });
-    
-  // };
   const dispatch = useDispatch();
 
   const handleSearch = (text) => {
