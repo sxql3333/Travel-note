@@ -5,23 +5,25 @@ import { FontAwesome } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { Avatar } from '@rneui/themed';
 import DiaryDetail from "../../diaryDetails";
+import { useSelector } from 'react-redux';
 const DiaryCard = () => {
 	const navigation = useNavigation();
-  const [searchResults, setSearchResults] = useState([]);
+  const searchResults = useSelector(state => state.searchResults);
+  console.log("searchResultsaaaa",searchResults);
+  // const [searchResults, setSearchResults] = useState([]);
 
-  const handleSearchResults = (response) => {
-    
-    console.log('Received search results:', response.data);
-    setSearchResults(response.data);
-  };
+  // const handleSearchResults = (response) => {
+  //   console.log('Received search results:', response.data);
+  //   setSearchResults(response.data);
+  // };
 
-  useEffect(() => {
-    const subscription = DeviceEventEmitter.addListener('searchResults', handleSearchResults);
+  // useEffect(() => {
+  //   const subscription = DeviceEventEmitter.addListener('searchResults', handleSearchResults);
 
-    return () => {
-      subscription.remove();
-    };
-  }, []);
+  //   return () => {
+  //     subscription.remove();
+  //   };
+  // }, [searchResults]);
 
 	return (
 		<View>

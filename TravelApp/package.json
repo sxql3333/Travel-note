@@ -32,6 +32,8 @@
     "react-native-root-toast": "^3.5.1",
     "react-native-unimodules": "^0.14.10",
     "react-native-web": "~0.19.6",
+    "react-redux": "^9.1.0",
+    "redux": "^5.0.1",
     "typescript": "^5.3.0"
   },
   "devDependencies": {

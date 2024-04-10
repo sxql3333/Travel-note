@@ -20,18 +20,50 @@ exports.getAllData = async (req, res) => {
     }
 }
 //App端根据游记标题或者用户名获取游记卡片内容
+// exports.getDataByName = async (req, res) => {
+//   console.log("111111111111111");
+//   try {
+//     console.log(req.body);
+//     const name= req.body.searchText;
+//     const notes = await TravelModel.find({
+//       $or: [
+//         { username: { $regex: name, $options: 'i' } },
+//         { title: { $regex: name, $options: 'i' } }
+//       ]
+//     });
+//     console.log(notes)
+
+//     return res.send({
+//       status: 200,
+//       message: '查询成功',
+//       data: notes
+//     });
+//   } catch (err) {
+//     console.log(err);
+//     return res.send({
+//       status: 400,
+//       message: '查询失败'
+//     });
+//   }
+// };
 exports.getDataByName = async (req, res) => {
   console.log("111111111111111");
   try {
     console.log(req.body);
-    const name= req.body.searchText;
-    const notes = await TravelModel.find({
-      $or: [
-        { username: { $regex: name, $options: 'i' } },
-        { title: { $regex: name, $options: 'i' } }
-      ]
-    });
-    console.log(notes)
+    const name = req.body.searchText;
+    let query = {}; // 定义一个空的查询对象
+
+    if (name) {
+      query = {
+        $or: [
+          { username: { $regex: name, $options: 'i' } },
+          { title: { $regex: name, $options: 'i' } }
+        ]
+      };
+    }
+
+    const notes = await TravelModel.find(query);
+    console.log(notes);
 
     return res.send({
       status: 200,
