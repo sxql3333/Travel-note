@@ -210,4 +210,59 @@ exports.getDiaryById = async (req, res) => {
       message: '查询失败',
     });
   }
-};
+}
+//web端审核
+exports.checkDiary = async (req, res) => {
+  try {
+    console.log("status",req.body);
+    const _id = req.body.id;
+    console.log("status",typeof _id);
+    const examinStatus = req.body.examinStatus;
+    const reason = req.body.reason;
+    const diary = await TravelModel.findById(_id);
+    if (!diary) {
+      return res.status(401).json({ message: '未找到对应的日记信息' });
+    }
+    // 更新日记信息中的 is_approved 字段为 examinStatus 的值，将 reason 存入日记信息中
+    diary.is_approved = Number(examinStatus);
+    diary.reason = reason;
+    // 将更新后的日记信息保存回数据库
+    await diary.save();
+    return res.send({
+      status: 200,
+      message: '审核成功',
+      data: diary
+    })
+  } catch (err) {
+    console.log(err);
+    return res.send({
+      status: 400,
+      message: '审核失败'
+    });
+  }
+}
+// web端逻辑删除
+exports.deleteDiary = async (req, res) => {
+  try {
+    console.log(req.body);
+    const _id = req.body.id;
+    const diary = await TravelModel.findById(_id);
+    if (!diary) {
+      return res.status(401).json({ message: '未找到对应的日记信息' });
+    }
+    diary.is_deleted = 0;
+    // 将更新后的日记信息保存回数据库
+    await diary.save();
+    return res.send({
+      code: 200,
+      message: '删除成功',
+      data: diary
+    })
+  } catch (err) {
+    console.log(err);
+    return res.send({
+      code: 400,
+      message: '删除失败'
+    });
+  }
+}

@@ -11,7 +11,9 @@ let TravelSchema = mongoose.Schema({
     views: Number,
     is_approved: Number, // 是否通过,0为未通过,1为通过
     user_id: String,  //游记作者id
-    name:String  //游记作者
+    name: String,  //游记作者
+    is_deleted: Number,
+    reason:String, //删除原因
 
 })
 module.exports = TravelSchema;

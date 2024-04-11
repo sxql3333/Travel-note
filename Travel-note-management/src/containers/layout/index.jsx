@@ -32,7 +32,7 @@ const App = () => {
     setOpen(newOpen);
   };
     return (
-    <Layout  >
+    <Layout  style={{minHeight: '97vh'}}>
       <Sider trigger={null} collapsible collapsed={collapsed}>
           <div className="demo-logo-vertical" style={{fontSize: '24px',  color: '#ffffff',margin: '12px 0 24px', textAlign: 'center'}} >
             <span className='title'><CloudTwoTone />平台</span>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useRef } from 'react';
 import {
   Routes,
   Route,
@@ -9,7 +9,7 @@ import {
 const { Option } = Select;
 import { AppstoreOutline, MessageFill, TeamFill } from 'antd-mobile-icons';
 import NavFooter from '../../components/nav-footer';
-import { Button, Input, Space, Avatar, List, Card,Row,Col,Select, Table, Tag,DatePicker,Drawer,Form, } from 'antd';
+import { Button, Input, Space, Avatar, List, Card,Row,Col,Select, Table, Tag,DatePicker,Drawer,Form, message,Modal} from 'antd';
 import store from '../../redux/store';
 import { SearchOutlined } from '@ant-design/icons';
 import { getAllData as fetchData, getSearchResult } from './actions';
@@ -17,12 +17,15 @@ import { useSelector, useDispatch } from 'react-redux';
 import approvalImg from '../../../assets/approval.png';
 import rejectImg from '../../../assets/reject.png';
 import waitImg from '../../../assets/wait.png';
-import { reqexamin } from '@/api';
+import { checkDiary,deleteDiary } from '@/api';
 export default function Home() {
+  const [form] = Form.useForm();
+  const [reason,setReason] = useState("");
   const [open, setOpen] = useState(false);
+  const [isModalOpen,setIsModalOpen] = useState(false);
+  const [reasonVisible,setReasonVisible] =useState(false);
   const { Search } = Input;
   const [noteData, setnoteData] = useState([]);
-  const dispatch = useDispatch();
   const onSearch = (value) => {
     console.log("进入搜索逻辑");
     console.log(value);
@@ -31,33 +34,43 @@ export default function Home() {
       console.log("返回数据", resData.data);
     });
   };
+  const [selectedValue, setSelectedValue] = useState('');
   const [rowDataForReview, setRowDataForReview] = useState(null);
   const [examinStatus, setexaminStatus] = useState();
+  // const [filteredData, setFilteredData] = useState(noteData);
   const showDrawer = (rowData) => {
 
     console.log("rowData", rowData);
     setRowDataForReview(rowData);
     setOpen(true);
   };
- 
+  const handleDelete = (rowData) => {
+    console.log("rowDatassss", rowData);
+    setRowDataForReview(rowData);
+    setIsModalOpen(true);
+  }
   const onClose = () => {
+    form.resetFields();
     setOpen(false);
+    
   };
   useEffect(() => {
     console.log("rowDataForReview", rowDataForReview);
   }, [rowDataForReview, noteData,examinStatus]); 
-  
-  useEffect(() => {
+  const getList = () => {
     fetchData().then((resData) => {
       setnoteData(resData.data); // 更新 noteData
       console.log("返回数据", resData.data);
-    })
+    });
+  }
+  useEffect(() => {
+    getList();
   }, []);  
   const columns = [
     {
       title: '作者',
-      key: 'username',
-      dataIndex: 'username',
+      key: 'name',
+      dataIndex: 'name',
     },
     {
       title: '发布时间',
@@ -92,18 +105,18 @@ export default function Home() {
     },
     {
       title: '游记状态',
-      dataIndex: 'status',
-      key: 'status',
-      render: (_, { status }) => {
+      dataIndex: 'is_approved',
+      key: 'is_approved',
+      render: (_, { is_approved }) => {
         let alt = '';
         let src = '';
-        if (status === 0) {
+        if (is_approved === 0) {
           alt = "rejection"
           src = rejectImg
-        } else if (status === 1) {
+        } else if (is_approved === 1) {
           alt = "approval"
           src = approvalImg
-        } else if (status === 2) {
+        } else if (is_approved === 2) {
           alt = "deletion"
           src = waitImg
         }
@@ -119,54 +132,92 @@ export default function Home() {
       key: 'action',
       render: (_, record) => (
         <Space size="middle">
-          <Button>查看详情</Button>
+          {/* <Button>查看详情</Button> */}
           <Button onClick={() => showDrawer(record)}>审核</Button>
+          <Button onClick={() => handleDelete(record)}>删除</Button>
         </Space>
       ),
     },
   ];
-  const data = [
-    {
-      key: '1',
-      title: 'John Brown',
-      image:'',
-      content: 32,
-      status: 0,
-      username: 'John Brown',
-    },
-    {
-      key: '2',
-      image:'',
-      title: 'Jim Green',
-      content: 42,
-      status: 1,
-      username: 'Jim Green',
-    },
-    {
-      key: '3',
-      image:'',
-      title: 'Joe Black',
-      content: 32,
-      status: 2,
-      username: 'Joe Black',
-    },
-  ];
   const onChange = (date) => {
+    console.log("data", date,);
+    if (date === '0') {
+      setReasonVisible(true);
+    } else {
+      setReasonVisible(false);
+    }
     setexaminStatus(date);
-    console.log(date);
   };
-  const onConfirm = async() => {
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+  const handleConfirm = async () => {
     try {
-      const res = await reqexamin(examinStatus);
+      console.log("id",rowDataForReview._id)
+      const res = await deleteDiary({ id: rowDataForReview._id });
       console.log("res", res);
-    } catch(e) {
-      console.log(e);
+      if (res.data.code === 200) {
+        console.log("删除成功");
+        message.success("删除成功");
+        setIsModalOpen(false);
+        getList();
+        onClose();
+      } else {
+        message.error("删除失败");
+      }
+    } catch {
+      message.error("删除失败");
     }
     
-    
+  };
+  const onChangeReason = (reason) => {
+    setReason(reason.target.value);
+  };
+  // let [filteredData,setFilteredData] = useState([]);
+  const [filteredData, setFilteredData] = useState(noteData)
+  // let filteredData = noteData.filter(item => item.is_deleted !== 0);
+  const onConfirm = async () => {
+    console.log("examinStatus", examinStatus);
+    console.log("reason222222", reason);
+    console.log("rowDataForReview._id",rowDataForReview._id)
+    if(examinStatus === '0' && reason === '') {
+      message.warning("请输入拒绝原因");
+      return;
+    }
+    try {
+      const id = rowDataForReview._id
+      const res = await checkDiary({ id, examinStatus, reason});
+      if (res.code = 200) {
+        message.success("审核成功");
+        onClose();
+        getList();
+      } else {
+        message.error("审核失败");
+      }
+    } catch(e) {
+      console.log(e);
+    } 
   };
   
-  
+const handleSelectChange = (value) => {
+  setSelectedValue(value);
+  let newData;
+  if (value === "") {
+    setShowFilteredData(false);
+  }else  {
+    newData = noteData.filter(item => item.is_deleted !== 0 &&item.is_approved === Number(value));
+    setShowFilteredData(true); 
+  } 
+  setFilteredData([...newData]);
+  };
+  const [showFilteredData, setShowFilteredData] = useState(false);
+  const onReset = () => {
+    setSelectedValue("");
+  };
+  const getDataSource = () => {
+    const data = noteData.filter(item => item.is_approved !== Number(selectedValue));
+    return showFilteredData ? filteredData : data;
+  };
 
   return (
     <div >
@@ -200,55 +251,57 @@ export default function Home() {
             onSearch={onSearch}
           />
           </Col>
-          <Col span={6}>
-            <Select style={{ width: '100%' }}>
-            <Select.Option value="demo">Demo</Select.Option>
-            </Select>
+          <Col span={5}>
+          <Select
+          showSearch
+          style={{
+            width: 200,
+          }}
+          placeholder="请选择游记状态"
+              optionFilterProp="children"
+              value={selectedValue} 
+          filterOption={(input, option) => (option?.label ?? '').includes(input)}
+          filterSort={(optionA, optionB) =>
+            (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
+          }
+          onChange={handleSelectChange} 
+          options={[
+            {
+              value: '0',
+              label: '已拒绝',
+            },
+            {
+              value: '1',
+              label: '已通过',
+            },
+            {
+              value: '2',
+              label: '待审核',
+            },
+          ]}
+            />
+            
+            {/* <Select style={{ width: '100%' }}>
+              <Select.Option key={} value={}>
+                所有
+              </Select.Option>
+            </Select> */}
+          </Col>
+          <Col span={2}>
+          <Button type="primary" style={{ marginLeft: '10px' }} onClick={onReset}>重置</Button>
           </Col>
         </Row>
         
       </Card>
 
-      {/* <div style={{ marginTop: '20px' }}> */}
-        {/* <Card
-          style={{
-            width: '100%',
-          }}
-        >
-          {' '}
-          <List
-            itemLayout="vertical"
-            size="large"
-            columns={3}
-            // gutter={[16, 16]}
-            pagination={{
-              onChange: (page) => {
-                console.log(page);
-              },
-              pageSize: 3,
-            }}
-            dataSource={noteData}
-            renderItem={(item) => (
-              <List.Item
-                key={item.title}
-                extra={
-                  <img
-                    width={272}
-                    alt="logo"
-                    src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png"
-                  />
-                }
-              >
-                <List.Item.Meta title={<a href={item.href}>{item.title}</a>} />
-                {item.content}
-              </List.Item>
-
-            )}
-          />
-        </Card>  */}
-               
-      {/* </div> */}
-      <Table columns={columns} dataSource={data} bordered pagination/>
+     
+      <Table columns={columns} dataSource={getDataSource()} bordered pagination />
+     
+      <Modal open={isModalOpen} onCancel={handleCancel} okText="确认"
+        cancelText="取消" onOk={handleConfirm} >
+        <p>你确定要删除吗?</p>
+      </Modal>
+      
       <Drawer
         title="审核"
         width={720}
@@ -274,7 +327,7 @@ export default function Home() {
             <Col span={12}>
               <div style={{display:'flex',alignItems:'center'}}>
               <p>作者：</p>
-                <p >{rowDataForReview?.username}</p>
+                <p >{rowDataForReview?.name}</p>
                 </div>
             </Col>
             <Col span={12}>
@@ -317,11 +370,11 @@ export default function Home() {
               </div>  
             </Col>
         </Row>
-        <Form >
+        <Form form={form}>
           <Row>
             <Col span={12}>
                 <Form.Item
-                  name="owner"
+                  name="examine"
                   label="审核："
                   rules={[
                     {
@@ -331,11 +384,27 @@ export default function Home() {
                   ]}
                 >
                   <Select placeholder="请选择" onChange={onChange}>
-                    <Option value="pass">通过</Option>
-                    <Option value="reject">拒绝</Option>
-                    <Option value="delete">删除</Option>
+                    <Option value="0">拒绝</Option>
+                    <Option value="1">通过</Option>
                   </Select>
                 </Form.Item>
+              </Col>
+          </Row>
+          <Row>
+            <Col span={24}>
+              {reasonVisible && (<Form.Item
+                name="reason"
+                label="原因："
+                rules={[
+                  {
+                    required: true,
+                    message: '请输入',
+                  },
+                ]}
+              >
+                <Input placeholder="请输入" value={reason} onChange={onChangeReason}/>
+              </Form.Item>
+              )}
               </Col>
           </Row>
         </Form>
