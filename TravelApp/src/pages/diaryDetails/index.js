@@ -29,7 +29,7 @@ const DiaryDetail = ({ route, navigation }) => {
     navigation.setOptions({
       headerTitle: () => (
         <View style={styles.headerTitleContainer}>
-          <Image source={item.avatar} style={styles.avatar} />
+          {/* <Image source={item.avatar} style={styles.avatar} /> */}
           <Text style={styles.authorName}>{item.nickname}</Text>
         </View>
       ),
@@ -54,7 +54,7 @@ const DiaryDetail = ({ route, navigation }) => {
           <Text style={styles.authorName}>{item.nickname}</Text>
         </View> */}
       </View>
-      <Image source={item.image} style={styles.image} />
+      {/* <Image source={item.image} style={styles.image} /> */}
       <View style={styles.contentContainer}>
         <Text style={styles.title}>{item.title}</Text>
         <View style={styles.infoContainer}>

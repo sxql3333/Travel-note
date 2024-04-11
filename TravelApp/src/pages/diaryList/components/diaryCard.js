@@ -14,23 +14,25 @@ const DiaryCard = () => {
 	return (
 		<View>
 			<FlatList
-        // data={searchResults} // 使用搜索结果数据
-				data={listData}
+        data={searchResults} // 使用搜索结果数据
+				// data={listData}
+        keyExtractor={(item) => item._id}
 				renderItem={({ item }) => (
 					<Pressable
             onPress={() => navigation.navigate("DiaryDetail", { item: item })}
+            key={item._id}
 						style={styles.cardContainer}
 					>
 						<Image
-							source={item.image}
+							src={item.image[0]}
 							style={{ width: '100%', height: 200, resizeMode: "stretch",borderRadius: 16 }}
 						/>
 						<View style={{paddingHorizontal:5}}>
 							<Text  numberOfLines={2} style={ styles.title}>{item.title}</Text>
 							<View style={{ flexDirection: "row", marginTop: 8,marginBottom:3,alignItems:'center',justifyContent:'space-between' }}>
 								<View style={{ flexDirection: "row", alignItems: "center" }}>
-									<Avatar size={16} rounded source={item.avatar} />
-									<Text style={{ marginLeft: 4 }}>{item.nickname}</Text>
+									{/* <Avatar size={16} rounded source={item.avatar} /> */}
+                  <Text style={{ marginLeft: 4 }}>{item.name}</Text>
 								</View>
 								<View style={{ flexDirection: "row", alignItems: "center" }}>
 									<Text style={{ color: colors.COLOR_GRAY, marginRight: 4 }}>{item.count}</Text>

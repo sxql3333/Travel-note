@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Image, View, Text, Button, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { Icon } from '@rneui/themed';
 import * as ImagePicker from 'expo-image-picker';
+import * as FileSystem from 'expo-file-system';
  
 const Add = ({ images, setImages }) => {
   // const [images, setImages] = useState([]);
@@ -27,38 +28,44 @@ const Add = ({ images, setImages }) => {
     // console.log(result);
  
     if (!result.cancelled && result.assets) {
-      // 设置选择的图片
-      setImages([...images, ...result.assets.map(asset => asset.uri)]);
-      console.log(images);
-      // 上传图片的逻辑
-      // uploadImage(result.assets[0].uri);
-     
+      const base64Images = await Promise.all(
+        result.assets.map(async (asset) => {
+          const response = await FileSystem.readAsStringAsync(asset.uri, {
+            encoding: FileSystem.EncodingType.Base64,
+          });
+          return `data:image/${asset.type};base64,${response}`;
+        })
+      );
+  
+      setImages([...images, ...base64Images]);
     } else {
       // console.log('取消选择图片！');
     }
   };
- 
-  // const uploadImage = async (uri) => {
-  //   // 创建FormData对象
-  //   const formData = new FormData();
-  //   formData.append('image', { uri, name: 'image.jpg', type: 'image/jpeg' });
- 
-  //   try {
-  //     const response = await fetch('https://your-api-endpoint', {
-  //       method: 'POST',
-  //       body: formData,
-  //       headers: {
-  //         'Content-Type': 'multipart/form-data',
-  //       },
-  //     });
- 
-  //     if (response.status === 200) {
-  //       console.log('图片上传成功');
-  //     } else {
-  //       console.log('图片上传失败');
-  //     }
-  //   } catch (error) {
-  //     console.log('上传图片时出错', error);
+  // const pickImage = async () => {
+  //   let result = await ImagePicker.launchImageLibraryAsync({
+  //     mediaTypes: ImagePicker.MediaTypeOptions.Images,
+  //     allowsEditing: true,
+  //     aspect: [4, 3],
+  //     quality: 1,
+  //     multiple: true,
+  //   });
+  
+  //   if (!result.cancelled && result.assets) {
+  //     const base64Images = await Promise.all(
+  //       result.assets.map(async (asset) => {
+  //         const response = await FileSystem.readAsStringAsync(asset.uri, {
+  //           encoding: FileSystem.EncodingType.Base64,
+  //         });
+  //         return `data:image/${asset.type};base64,${response}`;
+  //       })
+  //     );
+  //     setImages([...images, ...base64Images]);
+  //     // const selectedImages = result.assets.map((asset) => asset.uri);
+  //     // setImages([...images, ...selectedImages]);
+      
+  //   } else {
+  //     // 用户取消选择图片的处理逻辑
   //   }
   // };
 

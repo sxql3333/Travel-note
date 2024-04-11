@@ -6,18 +6,23 @@ import { FontAwesome } from "@expo/vector-icons";
 import Colors from "../../../utils/theme";
 import { useNavigation } from "@react-navigation/native";
 import { Avatar } from '@rneui/themed';
-import { useSelector } from "react-redux";
-import { getPersonalDiaryApi } from "../../../api/getPersonalDiary";
+import { useSelector, useDispatch } from "react-redux";
+import { getPersonalDiaryApi } from "@/api/getPersonalDiary";
+import { savePersonalNotes } from "@/redux/action";
 
 const myDiary = () => {
 	// const navigation = useNavigation();
+  const dispatch = useDispatch();
   const userInfo = useSelector(state => state.userInfo);
+  const personalNotes = useSelector(state => state.personalNotes);
+
 	const [index,setIndex] = useState(0);
-  const [personalDiary, setPersonalDiary] = useState([]);
+  // const [personalDiary, setPersonalDiary] = useState([]);
   useEffect(() => {
     getPersonalDiaryApi(userInfo.user._id).then((res) => {
       console.log("根据id获取到的游记",res.data);
-      setPersonalDiary(res.data);
+      dispatch(savePersonalNotes(res.data));   //派发action，获取个人笔记
+      // setPersonalDiary(res.data);
     });
   }, [userInfo.user.id]);
 	const truncatedTitle = (title) => { 
@@ -40,7 +45,8 @@ const myDiary = () => {
 					<View>
 					<FlatList
 						// data={listData}
-            data={personalDiary}
+            data={personalNotes}
+            keyExtractor={(item) => item._id}
 						renderItem={({ item }) => (
 							<Pressable
 								// onPress={() => navigation.navigate("RecipeDetail", { item: item })}
@@ -62,8 +68,8 @@ const myDiary = () => {
 								<View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',marginTop:16,marginHorizontal:6}}>
 									{/* <Button title="已通过" color="green"  containerStyle={ {borderRadius:5}}/> */}
                   <Button
-                    title={item.is_Approved ? '已通过' : '未通过'}
-                    color={item.is_Approved ? 'green' : 'red'}
+                    title={item.is_approved ? '已通过' : '未通过'}
+                    color={item.is_approved ? 'green' : 'red'}
                     containerStyle={{ borderRadius: 5 }}
                   />
 									<View style={{flexDirection:'row',alignItems:'center'}}>
@@ -111,4 +117,3 @@ const styles = StyleSheet.create({
 	}
 });
 export default myDiary;
-

@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 const initialState = {
   searchResults: [],
   userInfo: null,
+  personalNotes: [],
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -20,6 +21,11 @@ const rootReducer = (state = initialState, action) => {
           user:action.payload.user
         }
       };
+    case 'SAVE_PERSONAL_NOTES':
+      return {
+        ...state,
+        personalNotes: action.payload,
+      }
     default:
       return state;
   }

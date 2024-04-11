@@ -5,12 +5,12 @@ let TravelSchema = mongoose.Schema({
     title: String,
     image: [String], 
     content: String,
-    count: Number,
-    commentnum: Number,
+    count: Number,   //点赞数
+    commentnum: Number,   //评论数
     // created_time: Date,
     views: Number,
-    is_approved: Number, // 是否通过
-    user_id: String,
+    is_approved: Number, // 是否通过,0为未通过,1为通过
+    user_id: String,  //游记作者id
     name:String  //游记作者
 
 })
