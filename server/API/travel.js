@@ -3,7 +3,8 @@ const conn = require('../db');
 const TravelModel = require('../model/TravelModel');
 const fs = require('fs');
 // const multer = require('multer');
-// const path = require('path');
+const path = require('path');
+const { createCanvas, loadImage } = require('canvas');
 
 // 创建用于存储上传文件的存储引擎
 // const storage = multer.diskStorage({
@@ -127,23 +128,59 @@ exports.addDiary = async (req, res) => {
         const timestamp = Date.now();
         const imageName = `image_${timestamp}.jpg`;
         const imagePath = `./assets/${imageName}`;
-        const imageBuffer = Buffer.from(imageBase64, 'base64');
 
-        // 异步追加保存图片文件
-        fs.appendFile(imagePath, imageBuffer, (error) => {
-          if (error) {
-            console.error(`Failed to save image ${i}: ${error}`);
-            reject(error);
-          } else {
-            // 将图片名称与数据库名称保持一致
-            const databaseName = imageName;
+        // const imageBuffer = Buffer.from(imageBase64, 'base64');
 
-            const imageUrl = `https://localhost:5000/assets/${imageName}`;
-            imageUrls.push(imageUrl);
-            console.log(`Image ${i} saved successfully.`);
-            resolve(databaseName);
-          }
-        });
+        // // 异步追加保存图片文件
+        // fs.appendFile(imagePath, imageBuffer, (error) => {
+        //   if (error) {
+        //     console.error(`Failed to save image ${i}: ${error}`);
+        //     reject(error);
+        //   } else {
+        //     // 将图片名称与数据库名称保持一致
+        //     const databaseName = imageName;
+
+        //     const imageUrl = `http://localhost:5000/${imageName}`;
+        //     // const imageUrl = imagePath;
+        //     imageUrls.push(imageUrl);
+        //     console.log(`Image ${i} saved successfully.`);
+        //     resolve(databaseName);
+        //   }
+        // });
+        //创建一个Canvas画布
+        const canvas = createCanvas();
+        const ctx = canvas.getContext('2d');
+
+        //加载图像
+        loadImage(imageBase64).then((image) => {
+          //设置画布尺寸与图象一致
+          canvas.width = image.width;
+          canvas.height = image.height;
+
+          //绘制图像
+          ctx.drawImage(image, 0, 0);
+
+          //将Canves画布保存为JPG文件
+          canvas.toBuffer('image/jpeg');
+          fs.writeFile(imagePath, canvas.toBuffer('image/jpeg'), (error) => {
+            if (error) {
+              console.error(`Failed to save image ${i}: ${error}`);
+              reject(error);
+            } else {
+              // 将图片名称与数据库名称保持一致
+              const databaseName = imageName;
+              const imageUrl = `http://localhost:5000/${databaseName}`;
+              imageUrls.push(imageUrl);
+              console.log(`Image ${i} saved successfully.`);
+              resolve(databaseName);
+            }
+          });
+        })
+        .catch((error) => {
+          console.error(`Failed to load image ${i}: ${error}`);
+          reject(error);
+        })
+
       });
     }
 

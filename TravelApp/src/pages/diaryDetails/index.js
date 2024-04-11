@@ -1,22 +1,31 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, TextInput, TouchableWithoutFeedback } from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  TextInput,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import { colors } from '../diaryList/utils/data';
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import { Share } from 'react-native';
-
+import Carousel from 'react-native-snap-carousel';
 
 const DiaryDetail = ({ route, navigation }) => {
-  console.log ("组件重新渲染")
+  console.log('组件重新渲染');
   const { item } = route.params;
+  console.log('route.params', route.params);
   const [isFollowed, setIsFollowed] = useState(false);
 
   const handleFollow = () => {
     // 添加关注的逻辑
-    console.log("关注成功");
+    console.log('关注成功');
     setIsFollowed(true);
   };
   useEffect(() => {
-    console.log("isFollowed 更新:", isFollowed);
+    console.log('isFollowed 更新:', isFollowed);
   }, [isFollowed]);
   function handleShare() {
     // 执行分享逻辑
@@ -29,32 +38,39 @@ const DiaryDetail = ({ route, navigation }) => {
     navigation.setOptions({
       headerTitle: () => (
         <View style={styles.headerTitleContainer}>
-          {/* <Image source={item.avatar} style={styles.avatar} /> */}
-          <Text style={styles.authorName}>{item.nickname}</Text>
+          <Image source={item.avatar} style={styles.avatar} />
+          <Text style={styles.authorName}>{item.name}</Text>
         </View>
       ),
       headerRight: () => (
-      <View>
-      <TouchableOpacity style={styles.followButton} onPress={handleFollow}>
-        <Text style={styles.followButtonText}>{isFollowed ? "已关注" : "+关注"}</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.followButton} onPress={handleShare}>
-        <Text style={styles.followButtonText}>分享</Text>
-      </TouchableOpacity>
-      </View>
-      )
+        <View>
+          <TouchableOpacity style={styles.followButton} onPress={handleFollow}>
+            <Text style={styles.followButtonText}>
+              {isFollowed ? '已关注' : '+关注'}
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.followButton} onPress={handleShare}>
+            <Text style={styles.followButtonText}>分享</Text>
+          </TouchableOpacity>
+        </View>
+      ),
     });
   }, [navigation, item]);
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        {/* <View style={styles.userInfo}>
-          <Image source={item.avatar} style={styles.avatar} />
-          <Text style={styles.authorName}>{item.nickname}</Text>
-        </View> */}
-      </View>
-      {/* <Image source={item.image} style={styles.image} /> */}
+      <View style={styles.header}></View>
+      {/* <Image src={item.image} style={styles.image} /> */}
+      <Carousel
+        data={item.image}
+        renderItem={({ item: imageUrl }) => (
+          <View style={styles.imageContainer}>
+            <Image source={{ uri: imageUrl }} style={styles.image} />
+          </View>
+        )}
+        sliderWidth={300} // Adjust the width as needed
+        itemWidth={300} // Adjust the width as needed
+      />
       <View style={styles.contentContainer}>
         <Text style={styles.title}>{item.title}</Text>
         <View style={styles.infoContainer}>
@@ -90,6 +106,13 @@ const DiaryDetail = ({ route, navigation }) => {
 };
 
 const styles = StyleSheet.create({
+  imageContainer: {
+    width: '100%',
+    height: 250,
+    alignItems: 'center',
+    justifyContent: 'center',
+
+  },
   container: {
     flex: 1,
     padding: 16,
