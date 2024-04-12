@@ -17,5 +17,4 @@ router.post('/app/addDiary', travel.addDiary)
 router.post('/app/getPersonalDiary', travel.getDiaryById)
 router.post('/app/getAllDiary', travel.getAllDiary)
 
-
 module.exports = router

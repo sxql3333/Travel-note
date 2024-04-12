@@ -3,26 +3,25 @@ import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   TeamOutlined,
-    BookOutlined,
+  BookOutlined,
   UserOutlined,
-  CloudTwoTone
-    
+  CloudTwoTone,
 } from '@ant-design/icons';
-import { Layout, Menu, Button, theme,Avatar,Popover } from 'antd';
+import { Layout, Menu, Button, theme, Avatar, Popover } from 'antd';
 const { Header, Sider, Content } = Layout;
-import Home from "../home"
-import {  useNavigate} from 'react-router-dom'
+import Home from '../home';
+import { useNavigate } from 'react-router-dom';
 const App = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [selectedMenuKey, setSelectedMenuKey] = useState('1'); // 默认选中第一个菜单项
   const {
     token: { colorBgContainer, borderRadiusLG },
-    } = theme.useToken();
+  } = theme.useToken();
   const handleMenuClick = (e) => {
-        setSelectedMenuKey(e.key);
-    };
-    const [open, setOpen] = useState(false);
-    const navigate = useNavigate();
+    setSelectedMenuKey(e.key);
+  };
+  const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
   const handleConfirm = () => {
     navigate('/login');
     console.log('点击确定，执行退出操作');
@@ -31,8 +30,8 @@ const App = () => {
   const handleOpenChange = (newOpen) => {
     setOpen(newOpen);
   };
-    return (
-    <Layout  style={{minHeight: '97vh'}}>
+  return (
+    <Layout style={{ minHeight: '97vh' }}>
       <Sider trigger={null} collapsible collapsed={collapsed}>
           <div className="demo-logo-vertical" style={{fontSize: '24px',  color: '#ffffff',margin: '12px 0 24px', textAlign: 'center'}} >
             <span className='titleplat'><CloudTwoTone />平台</span>
@@ -53,10 +52,10 @@ const App = () => {
       </Sider>
       <Layout>
         <Header
-        style={{
-            padding:"12px",
+          style={{
+            padding: '12px',
             background: colorBgContainer,
-            display:'flex',
+            display: 'flex',
             flexDirection: 'row',
             justifyContent: 'space-between',
             alignItems: 'center',
@@ -71,25 +70,30 @@ const App = () => {
               width: 64,
               height: 64,
             }}
-                    />
-            <Popover
-                content={<div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
-                    <Button onClick={() => setOpen(false)} size='small'>取消</Button>
-                    <Button type="primary" onClick={handleConfirm} size='small'>确定</Button>
-                  </div>}
-                title="确定要退出吗？"
-                trigger="click"
-                open={open}
-                onOpenChange={handleOpenChange}
-            >
-         <Avatar
-            style={{
+          />
+          <Popover
+            content={
+              <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+                <Button onClick={() => setOpen(false)} size="small">
+                  取消
+                </Button>
+                <Button type="primary" onClick={handleConfirm} size="small">
+                  确定
+                </Button>
+              </div>
+            }
+            title="确定要退出吗？"
+            trigger="click"
+            open={open}
+            onOpenChange={handleOpenChange}
+          >
+            <Avatar
+              style={{
                 backgroundColor: '#1677ff',
-            }}
-            icon={<UserOutlined />}
+              }}
+              icon={<UserOutlined />}
             />
-    </Popover>
-         
+          </Popover>
         </Header>
         <Content
           style={{
@@ -100,15 +104,10 @@ const App = () => {
             borderRadius: borderRadiusLG,
           }}
         >
-          {selectedMenuKey === '1' ? (
-            <Home />
-          ) : (
-            <div>用户管理内容</div>
-          )}
+          {selectedMenuKey === '1' ? <Home /> : <div>用户管理内容</div>}
         </Content>
       </Layout>
-    </Layout> 
-   
+    </Layout>
   );
 };
 export default App;

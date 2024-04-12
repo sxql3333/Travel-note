@@ -1,5 +1,9 @@
 server/node_modules/
 Travel-note-management/node_modules
+TravelApp/.expo
+TravelApp/.idea
+TravelApp/%ProgramData%
+TravelApp/node_modules
 dist/
 npm-debug.log
 server/assets

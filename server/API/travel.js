@@ -80,7 +80,7 @@ exports.getDataByName = async (req, res) => {
     }
 
     const notes = await TravelModel.find(query);
-    console.log('后端查询到的', notes);
+    // console.log('后端查询到的', notes);
 
     return res.send({
       status: 200,
@@ -128,25 +128,7 @@ exports.addDiary = async (req, res) => {
         const timestamp = Date.now();
         const imageName = `image_${timestamp}.jpg`;
         const imagePath = `./assets/${imageName}`;
-
-        // const imageBuffer = Buffer.from(imageBase64, 'base64');
-
-        // // 异步追加保存图片文件
-        // fs.appendFile(imagePath, imageBuffer, (error) => {
-        //   if (error) {
-        //     console.error(`Failed to save image ${i}: ${error}`);
-        //     reject(error);
-        //   } else {
-        //     // 将图片名称与数据库名称保持一致
-        //     const databaseName = imageName;
-
-        //     const imageUrl = `http://localhost:5000/${imageName}`;
-        //     // const imageUrl = imagePath;
-        //     imageUrls.push(imageUrl);
-        //     console.log(`Image ${i} saved successfully.`);
-        //     resolve(databaseName);
-        //   }
-        // });
+        
         //创建一个Canvas画布
         const canvas = createCanvas();
         const ctx = canvas.getContext('2d');
@@ -230,11 +212,28 @@ exports.addDiary = async (req, res) => {
 };
 
 // App端根据id获取游记
+// exports.getDiaryById = async (req, res) => {
+//   try {
+//     console.log(req.body);
+//     const id = req.body.user_id;
+//     const diary = await TravelModel.find({ user_id: id });
+//     return res.send({
+//       status: 200,
+//       message: '查询成功',
+//       data: diary,
+//     });
+//   } catch (err) {
+//     console.log(err);
+//     return res.send({
+//       status: 400,
+//       message: '查询失败',
+//     });
+//   }
+// }
 exports.getDiaryById = async (req, res) => {
   try {
-    console.log(req.body);
-    const id = req.body.user_id;
-    const diary = await TravelModel.find({ user_id: id });
+    const { user_id } = req.body;
+    const diary = await TravelModel.find({ user_id, is_deleted: 1 }); // 添加筛选条件 is_deleted: 1
     return res.send({
       status: 200,
       message: '查询成功',
@@ -247,7 +246,7 @@ exports.getDiaryById = async (req, res) => {
       message: '查询失败',
     });
   }
-}
+};
 //web端审核
 exports.checkDiary = async (req, res) => {
   try {

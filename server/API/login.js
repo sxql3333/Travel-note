@@ -5,9 +5,8 @@ const AppUserModel = require('../model/AppUserModel');
 const jwt = require('jsonwebtoken');
 
 exports.login = async (req, res) => {
-  // console.log('进入登录函数');
   try {
-    console.log(req.body);
+    // console.log(req.body);
     const name = req.body.username;
     const password = req.body.password;
     const auth = req.body.auth;
@@ -85,7 +84,6 @@ exports.register = async (req, res) => {
 };
 exports.appLogin = async (req, res) => {
   try {
-    console.log(req.body);
     const name = req.body.username;
     const password = req.body.password;
 

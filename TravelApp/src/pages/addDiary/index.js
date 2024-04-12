@@ -54,7 +54,6 @@ const AddDiary = () => {
       return;
     } else {
       try {
-        // console.log("看下图片", images);
         const res = await AddDiaryApi(
           images,
           title,
@@ -63,10 +62,8 @@ const AddDiary = () => {
           userInfo.user.name,
           is_approved
         );
-        // console.log(res);
         const personalDiaryRes = await getPersonalDiaryApi(userInfo.user._id);
         dispatch(savePersonalNotes(personalDiaryRes.data));
-        console.log('新建之后再获取一次个人游记数据', personalDiaryRes);
         Navigation.navigate('Mine');
         setImages([]);
         setTitle('');
@@ -80,38 +77,6 @@ const AddDiary = () => {
           paddingHorizontal: 16,
         });
       }
-      // try {
-      //   const formData = new FormData();
-
-      //   images.forEach((image, index) => {
-      //     formData.append(`image${index}`, {
-      //       uri: image,
-      //       name: `image${index}.jpg`,
-      //       type: 'image/jpeg',
-      //     });
-      //   });
-
-      //   formData.append('title', title);
-      //   formData.append('text', text);
-      //   formData.append('userId', userInfo.user._id);
-      //   formData.append('userName', userInfo.user.name);
-      //   formData.append('isApproved', is_approved);
-
-      //   const res = await AddDiaryApi(formData);
-      //   console.log(res);
-      //   Navigation.navigate('Mine');
-      //   setImages([]);
-      //   setTitle("");
-      //   setText("");
-      // } catch (error) {
-      //   console.error(error);
-      //   showToast('添加失败', 330, {
-      //     fontSize: 12,
-      //     fontWeight: '500',
-      //     borderRadius: 8,
-      //     paddingHorizontal: 16,
-      //   });
-      // }
     }
   };
   return (
@@ -208,7 +173,6 @@ const AddDiary = () => {
                     color: text?.length ? '#333' : 'rgba(51, 51, 51, 0.5)',
                     textAlign: 'left',
                     borderBottomColor: 'rgba(255,255,255,255)',
-                    // fontWeight: '700',
                     paddingVertical: 0,
                   },
                 ]}
