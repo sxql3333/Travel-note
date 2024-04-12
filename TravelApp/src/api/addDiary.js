@@ -6,7 +6,8 @@ export const AddDiaryApi = async (
   text,
   userId,
   userName,
-  is_approved
+  is_approved,
+  is_deleted,
 ) => {
   try {
     return await http.post('app/addDiary', {
@@ -16,6 +17,7 @@ export const AddDiaryApi = async (
       id: userId,
       name: userName,
       is_approved,
+      is_deleted: is_deleted,
     });
   } catch (error) {
     console.log(error);

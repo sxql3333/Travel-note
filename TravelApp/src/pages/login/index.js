@@ -15,6 +15,7 @@ import { showToast } from '../../components/Toast';
 import UserIdentityUtil from '@/utils/userIdentityUtil';
 import { useDispatch } from 'react-redux';
 import { saveUserInfo } from '../../redux/action';
+// import Loading from "@/components/Loading";
 const Login = ({ navigation }) => {
   const dispatch = useDispatch();
   const [name, setname] = useState('');
@@ -24,6 +25,7 @@ const Login = ({ navigation }) => {
   const [isFocusedUser, setIsFocusedUser] = useState(false);
   const [isFocusedpwd, setIsFocusedpwd] = useState(false);
   const [watch, setWatch] = useState(false);
+ 
   const toggleWatch = () => setWatch(!watch);
 
   const handleFocus = () => {
@@ -75,6 +77,7 @@ const Login = ({ navigation }) => {
   const [checked, setChecked] = useState(false);
   const toggleCheckbox = () => setChecked(!checked);
   const iconName = checked ? 'check-circle' : 'circle';
+  //  const  [loading, setLoading] = useState(false);
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>

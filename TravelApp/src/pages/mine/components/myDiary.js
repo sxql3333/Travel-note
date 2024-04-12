@@ -20,11 +20,22 @@ const myDiary = () => {
 	const [index,setIndex] = useState(0);
   // const [personalDiary, setPersonalDiary] = useState([]);
   useEffect(() => {
-    getPersonalDiaryApi(userInfo.user._id).then((res) => {
-      // console.log("根据id获取到的游记",res.data);
-      dispatch(savePersonalNotes(res.data));   //派发action，获取个人笔记
-      // setPersonalDiary(res.data);
-    });
+    const fetchPersonalNotes = () => {
+      getPersonalDiaryApi(userInfo.user._id).then((res) => {
+        console.log("根据id获取到的游记", res.data);
+        dispatch(savePersonalNotes(res.data)); // 派发action，获取个人笔记
+        // setPersonalDiary(res.data);
+      });
+    };
+
+    // 初始加载一次
+    fetchPersonalNotes();
+
+    // 设置定时器，每隔一段时间获取一次数据
+    const intervalId = setInterval(fetchPersonalNotes, 600); // 60000 毫秒即每隔一分钟
+
+    // 组件卸载时清除定时器
+    return () => clearInterval(intervalId);
   }, [userInfo.user.id]);
 	const truncatedTitle = (title) => { 
 		return title.length > 20 ? title.substring(0, 20) + '...' : title;
@@ -135,7 +146,6 @@ const myDiary = () => {
 								
 							</Pressable>
 						)}
-						keyExtractor={item => item.id}
 					/>
 					</View>
 				</TabView.Item>

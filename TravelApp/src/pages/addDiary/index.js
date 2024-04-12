@@ -18,7 +18,8 @@ const AddDiary = () => {
   const [images, setImages] = useState([]);
   const [title, setTitle] = useState('');
   const [text, setText] = useState('');
-  const [is_approved, setIs_approved] = useState(0);
+  const [is_approved, setIs_approved] = useState(2);
+  const [is_deleted,setIs_deleted] = useState(1);
 
   const titleInputRef = useRef(null);
   const textInputRef = useRef(null);
@@ -60,7 +61,8 @@ const AddDiary = () => {
           text,
           userInfo.user._id,
           userInfo.user.name,
-          is_approved
+          is_approved,
+          is_deleted
         );
         const personalDiaryRes = await getPersonalDiaryApi(userInfo.user._id);
         dispatch(savePersonalNotes(personalDiaryRes.data));

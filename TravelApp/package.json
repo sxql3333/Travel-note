@@ -18,6 +18,7 @@
     "@rneui/themed": "^0.0.0-edge.2",
     "axios": "^1.6.8",
     "babel-plugin-module-resolver": "^5.0.0",
+    "eventemitter3": "^5.0.1",
     "expo": "~50.0.14",
     "expo-image-picker": "^14.7.1",
     "expo-status-bar": "~1.11.1",

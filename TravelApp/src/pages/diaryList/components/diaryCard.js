@@ -6,14 +6,19 @@ import { useNavigation } from "@react-navigation/native";
 import { Avatar } from '@rneui/themed';
 import DiaryDetail from "../../diaryDetails";
 import { useSelector } from 'react-redux';
+import eventBus from '@/utils/EventBus';
+
 const DiaryCard = () => {
 	const navigation = useNavigation();
   const searchResults = useSelector(state => state.searchResults);
   console.log("searchResultsaaaa",searchResults);
 	let [isFresh, setIsFresh] = useState(false);
 	const loadData = () => {
-		DeviceEventEmitter.emit('handleSearch');
+		// DeviceEventEmitter.emit('handleSearch');
+		console.log("触发了吗")
 		setIsFresh(false);
+		eventBus.emit('loadData');
+
 	}
 	return (
 		<View>

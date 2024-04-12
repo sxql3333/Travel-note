@@ -115,13 +115,14 @@ exports.getAllDiary = async (req, res) => {
 // App端添加游记
 exports.addDiary = async (req, res) => {
   try {
-    // console.log(req.body);
+    console.log(req.body);
     const title = req.body.title;
     const content = req.body.content;
     const id = req.body.id;
     const name = req.body.name;
     const imageBase64 = req.body.image;
     const is_approved = req.body.is_approved;
+    const is_deleted = req.body.is_deleted;
 
     function saveImage(imageBase64, i) {
       return new Promise((resolve, reject) => {
@@ -185,6 +186,7 @@ exports.addDiary = async (req, res) => {
           user_id: id,
           name: name,
           is_approved: is_approved,
+          is_deleted: is_deleted,
         });
 
         return newDiary.save();
@@ -280,7 +282,8 @@ exports.checkDiary = async (req, res) => {
 // web端逻辑删除
 exports.deleteDiary = async (req, res) => {
   try {
-    console.log(req.body);
+
+    console.log("我是删除",req);
     const _id = req.body.id;
     const diary = await TravelModel.findById(_id);
     if (!diary) {

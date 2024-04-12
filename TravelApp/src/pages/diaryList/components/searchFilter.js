@@ -3,16 +3,18 @@ import {
   Text,
   TextInput,
   View,
+  useallback,
   TouchableOpacity,
   Button,
   DeviceEventEmitter,
 } from 'react-native';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { FontAwesome } from '@expo/vector-icons';
 import { post } from '@/utils/http';
 import { useDispatch } from 'react-redux';
 import { setSearchResults } from '@/redux/action';
 import { getDataByName } from '@/api/getDataByName';
+import eventBus from '@/utils/EventBus';
 
 const SearchFilter = ({ icon, placeholder }) => {
   const [searchText, setSearchText] = useState('');
@@ -20,11 +22,29 @@ const SearchFilter = ({ icon, placeholder }) => {
   useEffect(() => {
     handleSearch(''); // 首次进入页面发送空搜索请求
   }, []);
-  const handleSearch = (text) => {
+  useEffect(() => {
+    eventBus.once('loadData', function () {
+      console.log('loadData 事件触发');
+      handleSearch('');
+    });
+  }, [handleSearch]);
+  const handleSearch = useCallback((text) => {
+    // const requestBody = {
+    //   searchText: text,
+    // };
+    // console.log('搜索请求体:', requestBody);
+    // post('/app/getDataByName', requestBody)
+    //   .then((response) => {
+    //     console.log('搜索成功', response.data);
+    //     dispatch(setSearchResults(response.data)); // 派发action，更新搜索结果
+    //   })
+    //   .catch((error) => {
+    //     console.error('搜索请求出错:', error);
+    //   });
     getDataByName(text).then((res) => {
       dispatch(setSearchResults(res.data));
-    });
-  };
+    })
+  });
   return (
     <View style={styles.container}>
       <FontAwesome name={icon} size={20} color="#f96163" />
