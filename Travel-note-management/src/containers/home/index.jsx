@@ -90,10 +90,11 @@ export default function Home() {
       render: (_, { image }) => {
         return (
           <img
-          width={150}
-          height={90}
-          alt="logo"
-          src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png"
+            width={150}
+            height={90}
+            alt="logo"
+            // src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png"
+            src={image[0]}
         />
         );
       }
@@ -174,7 +175,7 @@ export default function Home() {
     setReason(reason.target.value);
   };
   // let [filteredData,setFilteredData] = useState([]);
-  const [filteredData, setFilteredData] = useState(noteData)
+  const [filteredData, setFilteredData] = useState([...noteData])
   // let filteredData = noteData.filter(item => item.is_deleted !== 0);
   const onConfirm = async () => {
     console.log("examinStatus", examinStatus);
@@ -213,9 +214,11 @@ const handleSelectChange = (value) => {
   const [showFilteredData, setShowFilteredData] = useState(false);
   const onReset = () => {
     setSelectedValue("");
+    const newData = noteData.filter(item => item.is_deleted !== 0);
+    setFilteredData([...newData]);
   };
   const getDataSource = () => {
-    const data = noteData.filter(item => item.is_approved !== Number(selectedValue));
+    const data = noteData.filter(item => item.is_deleted !== Number(selectedValue));
     return showFilteredData ? filteredData : data;
   };
 
@@ -351,13 +354,15 @@ const handleSelectChange = (value) => {
             <Col span={12}>
               <div style={{display:'flex',alignItems:'center'}}>
               <p>游记图片：</p>
-                {/* <p>{rowDataForReview?.images}</p> */}
+              {rowDataForReview?.image.map((imageUrl, index) => (
                 <img
+                  key={index}
                   width={150}
                   height={90}
-                  alt="logo"
-                  src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png"
-                />
+                  alt={`image_${index}`}
+                  src={imageUrl}
+                  style={{ marginLeft: 10 }}
+                />))}
               </div>
                 
             </Col>

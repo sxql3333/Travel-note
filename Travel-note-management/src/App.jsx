@@ -9,11 +9,12 @@ export default function App() {
   return (
     <Router>
       <Routes>
-        <Route path='/login' element={<Login />}></Route>
+        {/* <Route path='/login' element={<Login />}></Route> */}
+        <Route path='/*' element={<Login />}></Route>
         <Route path='/register' element={<Register />}></Route>
         {/* <Route path="/*" element={<Home />}></Route> */}
-        <Route path="/*" element={<Layout />}></Route>
-        {/* <Route path="/1" element={<Layout />}></Route> */}
+        {/* <Route path="/*" element={<Layout />}></Route> */}
+        <Route path="/home" element={<Layout />}></Route>
       </Routes>
     </Router>
   )

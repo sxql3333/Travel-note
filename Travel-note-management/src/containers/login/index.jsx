@@ -31,7 +31,7 @@ const LoginForm = () => {
   };
 
   // 定义登录事件函数
-  const handleLoginSubmit = (event) => {
+  const handleLoginSubmit = async(event) => {
     event.preventDefault();
 
     // 构建用户信息对象
@@ -43,14 +43,18 @@ const LoginForm = () => {
     console.log("user", user);
 
     // 调用 handleLogin action creator
-    handleLogin(user);
+    const res = await handleLogin(user);
+    console.log("222222",res)
+    if(res){
+      navigate('/home');
+    }
   };
 
   return (
-    <div className="bg">
-      <div id="login">
-        <div className="title">
-          <span>登录</span>
+      <div className="bg" >
+      <div className="login" >
+        <div className="titleCon">
+          <span className='titles'>云平台</span>
         </div>
         {/* <Form name="loginForm" onFinish={onFinish}> */}
         <Form name="loginForm">

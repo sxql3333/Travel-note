@@ -10,13 +10,21 @@ const DiaryCard = () => {
 	const navigation = useNavigation();
   const searchResults = useSelector(state => state.searchResults);
   console.log("searchResultsaaaa",searchResults);
-
+	let [isFresh, setIsFresh] = useState(false);
+	const loadData = () => {
+		DeviceEventEmitter.emit('handleSearch');
+		setIsFresh(false);
+	}
 	return (
 		<View>
 			<FlatList
-        data={searchResults} // 使用搜索结果数据
+        		data={searchResults} // 使用搜索结果数据
 				// data={listData}
-        keyExtractor={(item) => item._id}
+				refreshing={isFresh}
+				onRefresh={() => {
+					loadData();
+				}}
+        		keyExtractor={(item) => item._id}
 				renderItem={({ item }) => (
 					<Pressable
             onPress={() => navigation.navigate("DiaryDetail", { item: item })}

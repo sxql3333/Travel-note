@@ -10,11 +10,13 @@ import {
 } from 'react-native';
 import { colors } from '../diaryList/utils/data';
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
-import { Share } from 'react-native';
+import { Share,Dimensions } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
+import { Icon } from '@rneui/themed';
 
 const DiaryDetail = ({ route, navigation }) => {
   console.log('组件重新渲染');
+  const { width} = Dimensions.get('window')
   const { item } = route.params;
   console.log('route.params', route.params);
   const [isFollowed, setIsFollowed] = useState(false);
@@ -43,14 +45,18 @@ const DiaryDetail = ({ route, navigation }) => {
         </View>
       ),
       headerRight: () => (
-        <View>
-          <TouchableOpacity style={styles.followButton} onPress={handleFollow}>
+        <View style={{flexDirection:'row',justifyContent:'center'}}>
+          <TouchableOpacity style={[styles.followButton,{ backgroundColor: colors.COLOR_PRIMARY,}]} onPress={handleFollow}>
             <Text style={styles.followButtonText}>
               {isFollowed ? '已关注' : '+关注'}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.followButton} onPress={handleShare}>
-            <Text style={styles.followButtonText}>分享</Text>
+            <Icon
+              name='share-social-outline'
+              type='ionicon'
+              color='#2F6CE0'
+      />
           </TouchableOpacity>
         </View>
       ),
@@ -59,8 +65,9 @@ const DiaryDetail = ({ route, navigation }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}></View>
+      <View style={styles.header}>
       {/* <Image src={item.image} style={styles.image} /> */}
+      
       <Carousel
         data={item.image}
         renderItem={({ item: imageUrl }) => (
@@ -68,9 +75,11 @@ const DiaryDetail = ({ route, navigation }) => {
             <Image source={{ uri: imageUrl }} style={styles.image} />
           </View>
         )}
-        sliderWidth={300} // Adjust the width as needed
-        itemWidth={300} // Adjust the width as needed
-      />
+        sliderWidth={width} 
+        sliderHeight={width}
+        itemWidth={width} // Adjust the width as needed
+        />
+        </View>
       <View style={styles.contentContainer}>
         <Text style={styles.title}>{item.title}</Text>
         <View style={styles.infoContainer}>
@@ -132,10 +141,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   avatar: {
-    width: 32,
+    // width: 32,
     height: 32,
     borderRadius: 16,
-    marginRight: 8,
+    // marginRight: 8,
   },
   authorName: {
     fontSize: 18,
@@ -143,9 +152,9 @@ const styles = StyleSheet.create({
   },
   followButton: {
     paddingHorizontal: 12,
-    paddingVertical: 8,
+    paddingVertical: 4,
     borderRadius: 8,
-    backgroundColor: colors.COLOR_PRIMARY,
+
   },
   followButtonText: {
     color: 'white',

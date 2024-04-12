@@ -115,7 +115,7 @@ exports.getAllDiary = async (req, res) => {
 // App端添加游记
 exports.addDiary = async (req, res) => {
   try {
-    console.log(req.body);
+    // console.log(req.body);
     const title = req.body.title;
     const content = req.body.content;
     const id = req.body.id;
