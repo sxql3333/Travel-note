@@ -1,35 +1,66 @@
-# 项目目录
+# 项目介绍
 
-* server---后端文件夹
-  * 启动方式：
-    ```
-    cd server
-    node app.js/npm start
-    ```
-* Travel-note-management---管理系统
-  * 启动方式
-    ```
-    cd Travel-note-management
-    npm start
-    ```
-* TravelApp---旅行日记App端
-  * 启动方式
-  * ```
-    npm start
-    ```
+该项目包括两个主要模块：游记发布与展示的用户系统和内容合规的审核管理系统。
+1.用户系统是一个 App 移动端项目，用户可以发布自己的游记，并查看和分享所有已成功审
+核通过的游记。
+2.审核管理系统是一个 PC 站点，具备不同角色的用户可以对用户发布的游记进行审核检
+查、删除等操作。这个系统主要用于在游记上线之前对内容进行合规性的审核。
 
-数据库设计
+# 上手指南
 
-游记
+安装步骤
+
+1.克隆仓库
 
 ```
-_id: String, // ID，假设它是唯一标识符，使用字符串（String）数据类型
-标题: String, // 游记标题，使用字符串（String）数据类型存储标题
-内容: String, // 游记内容，再次使用字符串（String）数据类型存储内容
-图片: [String], // 图片列表，假设它是指向图片的URL，使用字符串（String）数据类型存储    创建日期: Date, // 使用日期（Date）数据类型存储创建日期
-是否审核通过: Boolean, // 使用布尔（Boolean）数据类型表示游记是否审核通过 0表示已拒绝，1表示已通过，2表示待审核
-浏览量: Number, // 使用数字（Number）数据类型存储浏览量，这个字段可以根据需要进行扩展
-用户ID: String// 假设这是与游记关联的用户的唯一标识符，使用字符串（String）数据类型存储
+https://github.com/sxql3333/Travel-note.git
 ```
 
-App用户
+2.运行服务端
+
+```
+cd server
+npm start
+```
+
+3.运行审核管理系统
+
+```
+cd Travel-note-management
+npm start
+```
+
+4.运行App端
+
+```
+cd TravelApp
+npm start
+```
+
+5.（如需）解决虚拟机与本地电脑桥接问题
+
+```
+adb reverse tcp:5000 tcp:5000
+```
+
+# 目录结构描述
+
+├── readme.md           // 说明文档
+
+├── server     // 后端文件夹
+
+├── Travel-note-management     // 审核管理系统
+
+├──TravelApp   //旅行游记App
+
+# 构建工具
+
+[React.js](https://react.dev/)
+
+[Expo](https://expo.dev/)
+
+[React Native ](https://expo.dev/)
+
+[Node](https://nodejs.p2hp.com/learn)
+
+[MongoDB](https://mongodb.net.cn/manual/)
