@@ -1,9 +1,11 @@
 import { useState,useRef } from 'react';
-import { Text, View,  StyleSheet,  TouchableWithoutFeedback, Keyboard,TouchableOpacity,Image } from 'react-native';
-import { Button,Input,Icon } from "@rneui/themed";
+import { Image,Text, View,  StyleSheet,  TouchableWithoutFeedback, Keyboard,TouchableOpacity } from 'react-native';
+import { Button,Input,Icon, Avatar } from "@rneui/themed";
 import { Colors } from '@/utils/theme';
 import { RegisterApi } from '@/api/register';
 import { showToast } from '@/components/Toast';
+import * as ImagePicker from 'expo-image-picker';
+
 
 const Register = ({ navigation }) => {
   const [name, setname] = useState("");
@@ -17,9 +19,11 @@ const Register = ({ navigation }) => {
   const [isFocusedrepwd, setIsFocusedrepwd] = useState(false);
   const [watch, setWatch] = useState(false);
   const [rewatch, setreWatch] = useState(false);
+  const [images, setImages] = useState(null);
   const toggleWatch = () => setWatch(!watch);
+  
   const togglereWatch = () => setreWatch(!rewatch);
- 
+  
   const handleFocus = () => {
     // setPlaceholder('');
     setIsFocusedUser(true);
@@ -45,7 +49,9 @@ const Register = ({ navigation }) => {
     const toggleCheckbox = () => setChecked(!checked);
   const iconName = checked ? 'check-circle' : 'circle';
   const onRegister = async () => {
-    if(name === "") {
+    if(images === null) {
+      showToast("请选择图像", 330);
+    }else if (name === "") {
       showToast("请输入用户名", 330);
     }else if(pwd === "") {
       showToast("请输入密码", 330);
@@ -58,7 +64,7 @@ const Register = ({ navigation }) => {
     } else {
       // navigation.navigate("Login");
       try {
-        const res = await RegisterApi(name, pwd);
+        const res = await RegisterApi(name, pwd,images);
         console.log("res", res);
         if (res.code === 200) {
           showToast("注册成功", 330);
@@ -74,12 +80,47 @@ const Register = ({ navigation }) => {
     }
    
   }
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.image,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+      multiple: true,
+    });
+    if (!result.canceled && result.assets) {
+      console.log("222222222", result.assets[0].uri);
+      
+      setImages(result.assets[0].uri);
+    } else {
+      console.log('取消选择图片！');
+    }
+  };
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={styles.container}>
             <View style={styles.title}>
               <Text style={styles.titleText}>注册</Text>
             </View>
+            <View>
+            
+              <TouchableOpacity style={styles.cameraContainer} onPress={pickImage}>
+                  
+                {images ?
+                  <View>
+                  <Avatar source={{ uri: images }} size={70} rounded avatarStyle={{ width: 70, height: 70 }}/>  
+                  </View> :
+                   <View style={styles.avatarStyle}>
+                    <Icon name="camera" size={25} color="#d3d3d3" type='ionicon' />
+                    </View>
+                 
+                  }
+                </TouchableOpacity>
+            </View>
+          
+          {/* <View>
+            <Image source={{ uri: uri }} style={styles.imagetyle} resizeMode="contain" />
+          </View> */}
             <View style={[styles.inputContainer, { 
                   marginTop: 32,
                   borderBottomColor: isFocusedUser ? 'rgba(51, 51, 51, 1)' : 'rgba(0, 0, 0, 0.08)',
@@ -294,15 +335,20 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     paddingTop: 80,
-    paddingHorizontal:20,
+    paddingHorizontal: 20,
   },
   inputContainer: {
-    marginHorizontal:10,
+    marginHorizontal: 10,
     borderBottomWidth: 1,
     flexDirection: 'row',
     alignItems: 'flex-end',
     paddingBottom: 8,
     
+  },
+  cameraContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   inputsubContainer: {
     position: 'relative',
@@ -323,47 +369,59 @@ const styles = StyleSheet.create({
     zIndex: 0,
     display: 'flex',
   },
-  inputContainerStyle:{
+  inputContainerStyle: {
     backgroundColor: 'transparent',
     padding: 0,
     margin: 0,
     height: 40,
     flex: 1,
   },
-    title: {
-        marginBottom:20,
+  title: {
+    marginBottom: 20,
   },
   titleText: {
     fontSize: 30,
     fontWeight: '700',
-    },
-    subtitle: {
-        fontSize: 40,
-        marginBottom: 10,
-        fontWeight: '700',
-        color: '#2F6CE0',
-    },
-    description: {
-        fontSize:17,
-        letterSpacing: 4,
-    },
-    loginButton: {
+  },
+  subtitle: {
+    fontSize: 40,
+    marginBottom: 10,
+    fontWeight: '700',
+    color: '#2F6CE0',
+  },
+  description: {
+    fontSize: 17,
+    letterSpacing: 4,
+  },
+  loginButton: {
     marginVertical: 12,
     borderRadius: 55,
   },
   register: {
     alignItems: 'center',
-    marginTop:10,
-  }, 
+    marginTop: 10,
+  },
   registerText: {
     color: Colors.primary,
-    fontSize:15,
+    fontSize: 15,
   },
-    subcontainer: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginTop:300,
-    },
+  subcontainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 300,
+  },
+  avatarStyle: {
+    width: 70,
+    height: 55,
+    backgroundColor: 'rgba(0, 0, 0, 0.08)',
+    justifyContent: 'center',
+    alignItems: 'center',
+},
+  imageStyle: {
+    width: 180,
+    height: 180,
+    // marginTop: 20
+  }
 });
 export default Register;

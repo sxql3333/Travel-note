@@ -1,23 +1,36 @@
-import { StyleSheet, Text, TextInput, View, Image } from 'react-native';
-import React from 'react';
+import { StyleSheet, Text, TextInput, View } from 'react-native';
+import React,{useState} from 'react';
 import { Button } from '@rneui/base';
 import { FontAwesome } from '@expo/vector-icons';
 import { Avatar } from '@rneui/themed';
 import { useSelector } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
+
 
 const SearchFilter = () => {
+  const navigation = useNavigation();
   const userInfo = useSelector((state) => state.userInfo);
+  const editInformation = () => {
+    navigation.navigate('EditInfo');
+  };
+  const editPwd = () => {
+    navigation.navigate('EditPassword',{
+      name: userInfo?.user?.name});
+  };
   return (
     <View style={styles.container}>
+      {/* <TouchableOpacity > */}
       <Avatar
-        source={require('../../../assets/avatar1.jpg')}
-        size={40}
+        source={userInfo?.user?.avatar ? { uri: userInfo.user.avatar } : require('@/assets/avatar1.jpg')}
+        size={70}
         rounded
-        avatarStyle={{ width: 40, height: 40 }}
+        avatarStyle={{ width: 70, height: 70 }}
       />
+        
+      {/* </TouchableOpacity> */}
       <Text style={styles.nickname}>{userInfo?.user?.name}</Text>
       <View
-        style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 5 }}
+        style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 5 ,marginTop:5}}
       >
         <Text style={styles.number}>85</Text>
         <Text style={styles.text}>获赞</Text>
@@ -55,6 +68,7 @@ const SearchFilter = () => {
           }}
           titleStyle={{ color: '#000', fontSize: 14 }}
           containerStyle={{ marginRight: 16 }}
+          onPress={() => editInformation()}
         >
           编辑资料
         </Button>
@@ -64,6 +78,7 @@ const SearchFilter = () => {
             borderRadius: 8,
           }}
           titleStyle={{ color: '#000', fontSize: 14 }}
+          onPress={() => editPwd()}
         >
           密码设置
         </Button>
@@ -88,7 +103,6 @@ const styles = StyleSheet.create({
   },
   nickname: {
     fontSize: 25,
-    marginLeft: 8,
   },
   number: {
     fontSize: 14,

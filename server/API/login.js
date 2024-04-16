@@ -126,7 +126,7 @@ exports.appRegister = async (req, res) => {
   try {
     const name = req.body.username;
     const password = req.body.password;
-
+    const avatar =  req.body.avatar;
     const existingUser = await AppUserModel.findOne({ name: name });
 
     if (existingUser) {
@@ -139,6 +139,7 @@ exports.appRegister = async (req, res) => {
     const newUser = new AppUserModel({
       name: name,
       password: password,
+      avatar: avatar,
     });
 
     await newUser.save();
@@ -154,3 +155,67 @@ exports.appRegister = async (req, res) => {
     });
   }
 };
+exports.updateInfo = async (req, res) => {
+  try {
+    const name = req.body.username;
+    const avatar = req.body.avatar;
+    const user = await AppUserModel.findOne({ name: name });
+    if (!user) {
+      return res.send({
+        code: 401,
+        message: '用户名不存在',
+      });
+    }
+    user.avatar = avatar;
+    await user.save();
+    return res.send({
+      code: 200,
+      message: '更新成功',
+      data: {
+        user: user
+      },
+    });
+  } catch (err) {
+    return res.send({
+      code: 400,
+      message: '更新失败',
+    });
+  }
+}
+exports.updatePwd = async (req, res) => {
+  try {
+    const name = req.body.username;
+    const password = req.body.password;
+    const newPassword = req.body.newPassword;
+    const user = await AppUserModel.findOne({ name: name });
+    if (!user) {
+      return res.send({
+        code: 401,
+        message: '用户名不存在',
+      });
+    }
+    if (password !== user.password) {
+      return res.send({
+        code: 402,
+        message: '旧密码不正确',
+      });
+    }
+    if (newPassword === user.password) {
+      return res.send({
+        code: 403,
+        message: '新密码不能与旧密码相同',
+      });
+    }
+    user.password = newPassword;
+    await user.save();
+    return res.send({
+      code: 200,
+      message: '更新成功',
+      data: {
+        user: user
+      },
+    });
+  } catch (err) {
+
+  }
+}

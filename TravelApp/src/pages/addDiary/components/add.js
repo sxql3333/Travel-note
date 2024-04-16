@@ -27,7 +27,7 @@ const Add = ({ images, setImages }) => {
  
     // console.log(result);
  
-    if (!result.cancelled && result.assets) {
+    if (!result.canceled && result.assets) {
       const base64Images = await Promise.all(
         result.assets.map(async (asset) => {
           const response = await FileSystem.readAsStringAsync(asset.uri, {

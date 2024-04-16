@@ -1,6 +1,6 @@
 import {FlatList,StyleSheet,Text,View,Image,Pressable,Dimensions,Alert} from "react-native";
 import React,{useEffect, useState} from "react";
-import { Button,Tab,TabView } from '@rneui/themed';
+import { Button,Tab,TabView,Icon } from '@rneui/themed';
 import { colors, listData } from "../utils/data";
 import { FontAwesome } from "@expo/vector-icons";
 import Colors from "../../../utils/theme";
@@ -32,10 +32,10 @@ const myDiary = () => {
     fetchPersonalNotes();
 
     // 设置定时器，每隔一段时间获取一次数据
-    const intervalId = setInterval(fetchPersonalNotes, 600); // 60000 毫秒即每隔一分钟
+    // const intervalId = setInterval(fetchPersonalNotes, 600); // 60000 毫秒即每隔一分钟
 
-    // 组件卸载时清除定时器
-    return () => clearInterval(intervalId);
+    // // 组件卸载时清除定时器
+    // return () => clearInterval(intervalId);
   }, [userInfo.user.id]);
 	const truncatedTitle = (title) => { 
 		return title.length > 20 ? title.substring(0, 20) + '...' : title;
@@ -89,7 +89,7 @@ const myDiary = () => {
 	return (
 		<>
 			<View style={{paddingHorizontal:16}}>
-			<Tab value={index} onChange={setIndex} >
+			<Tab value={index} onChange={setIndex} containerStyle={{backgroundColor:'#fff'}}>
 				<Tab.Item>作品</Tab.Item>
 				<Tab.Item>喜欢</Tab.Item>
 				</Tab>
@@ -150,8 +150,12 @@ const myDiary = () => {
 					</View>
 				</TabView.Item>
 				<TabView.Item style={[styles.tabView,{width:Dimensions.get('window').width}]}>
-					<View>
-					<Text>喜欢</Text>
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingVertical:12 }}>
+            <View style={{ backgroundColor: "#fff",flex:1,justifyContent: 'center', alignItems: 'center',width:Dimensions.get('window').width-24 }}>
+              <Icon name="document-outline" type='ionicon'/>
+              <Text>你还没有赞过任何游记哦</Text>
+            </View>
+            
 					</View>
 					
 				</TabView.Item>

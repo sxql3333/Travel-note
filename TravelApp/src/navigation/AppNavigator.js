@@ -9,6 +9,8 @@ import Home from "../pages/home";
 import Mine from "../pages/mine";
 import AddDiary from "../pages/addDiary";
 import DiaryDetail from "../pages/diaryDetails";
+import EditInfo from "../pages/editInfo";
+import EditPassword from "../pages/editPassword";
 
 const Stack = createNativeStackNavigator();
 const AppNavigator = () => {
@@ -24,7 +26,9 @@ const AppNavigator = () => {
                 <Stack.Screen name="Mine" component={Mine} />
                 <Stack.Screen name="DiaryList" component={DiaryList} />
                 <Stack.Screen name="AddDiary" component={AddDiary} />
-                <Stack.Screen name="DiaryDetail" component={DiaryDetail}/>
+                <Stack.Screen name="DiaryDetail" component={DiaryDetail} />
+                <Stack.Screen name="EditInfo" component={EditInfo} options={{ title: '编辑资料' }} />
+                <Stack.Screen name="EditPassword" component={EditPassword} options={{ title: '修改密码' }} />
             </Stack.Navigator>
         </NavigationContainer>
     );

@@ -1,11 +1,11 @@
 import http from '../utils/http';
 
-export const RegisterApi = async (name, pwd,Avatar) => {
+export const updatePasswordApi = async (name, pwd,newPwd) => {
     try {
-        return await http.post('app/register', {
+        return await http.post('app/updatePwd', {
             username: name,
             password: pwd,
-            avatar:Avatar
+            newPassword: newPwd,
         });
     } catch (error) {
         throw error;
