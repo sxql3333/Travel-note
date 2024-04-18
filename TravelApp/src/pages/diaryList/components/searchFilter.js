@@ -29,21 +29,9 @@ const SearchFilter = ({ icon, placeholder }) => {
     });
   }, [handleSearch]);
   const handleSearch = useCallback((text) => {
-    // const requestBody = {
-    //   searchText: text,
-    // };
-    // console.log('搜索请求体:', requestBody);
-    // post('/app/getDataByName', requestBody)
-    //   .then((response) => {
-    //     console.log('搜索成功', response.data);
-    //     dispatch(setSearchResults(response.data)); // 派发action，更新搜索结果
-    //   })
-    //   .catch((error) => {
-    //     console.error('搜索请求出错:', error);
-    //   });
     getDataByName(text).then((res) => {
       dispatch(setSearchResults(res.data));
-    })
+    });
   });
   return (
     <View style={styles.container}>

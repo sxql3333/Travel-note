@@ -6,18 +6,6 @@ const fs = require('fs');
 const path = require('path');
 const { createCanvas, loadImage } = require('canvas');
 
-// 创建用于存储上传文件的存储引擎
-// const storage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//     cb(null, 'assets'); // 指定文件上传的目标目录，这里假设为 'assets'
-//   },
-//   filename: (req, file, cb) => {
-//     const ext = path.extname(file.originalname);
-//     const filename = `image${Date.now()}${ext}`;
-//     cb(null, filename); // 指定保存的文件名
-//   },
-// });
-
 //web端获取所有游记
 exports.getAllData = async (req, res) => {
   try {
@@ -35,39 +23,12 @@ exports.getAllData = async (req, res) => {
     });
   }
 };
-//App端根据游记标题或者用户名获取游记卡片内容
-// exports.getDataByName = async (req, res) => {
-//   console.log("111111111111111");
-//   try {
-//     console.log(req.body);
-//     const name= req.body.searchText;
-//     const notes = await TravelModel.find({
-//       $or: [
-//         { username: { $regex: name, $options: 'i' } },
-//         { title: { $regex: name, $options: 'i' } }
-//       ]
-//     });
-//     console.log(notes)
 
-//     return res.send({
-//       status: 200,
-//       message: '查询成功',
-//       data: notes
-//     });
-//   } catch (err) {
-//     console.log(err);
-//     return res.send({
-//       status: 400,
-//       message: '查询失败'
-//     });
-//   }
-// };
 exports.getDataByName = async (req, res) => {
   console.log('111111111111111');
   try {
     console.log(req.body);
     const name = req.body.searchText;
-    // let query = {}; // 定义一个空的查询对象
     let query = { is_approved: 1 }; // 添加is_approved条件
 
     if (name) {
@@ -96,13 +57,43 @@ exports.getDataByName = async (req, res) => {
   }
 };
 //App端获取所有游记
-exports.getAllDiary = async (req, res) => {
+exports.getMoreDiary = async (req, res) => {
+  // try {
+  //   const diary = await TravelModel.find();
+  //   return res.send({
+  //     status: 200,
+  //     message: '查询成功',
+  //     data: diary,
+  //   });
+  // } catch (err) {
+  //   console.log(err);
+  //   return res.send({
+  //     status: 400,
+  //     message: '查询失败',
+  //   });
+  // }
   try {
-    const diary = await TravelModel.find();
+    const { page, limit } = req.body; // 从请求参数中获取页数和每页显示的数量
+    console.log("page, limit",page, limit);
+    const pageNumber = parseInt(page) || 1;
+    const limitNumber = parseInt(limit) || 4;
+
+    const skipCount = (pageNumber - 1) * limitNumber;
+
+    const totalDiaryCount = await TravelModel.countDocuments(); // 获取游记总数
+
+    const diary = await TravelModel.find()
+      .skip(skipCount)
+      .limit(limitNumber);
+
     return res.send({
       status: 200,
       message: '查询成功',
-      data: diary,
+      data: {
+        diary,
+        totalPages: Math.ceil(totalDiaryCount / limitNumber), // 计算总页数
+        currentPage: pageNumber, // 返回当前页数
+      },
     });
   } catch (err) {
     console.log(err);
@@ -111,6 +102,8 @@ exports.getAllDiary = async (req, res) => {
       message: '查询失败',
     });
   }
+
+
 };
 // App端添加游记
 exports.addDiary = async (req, res) => {
@@ -213,25 +206,6 @@ exports.addDiary = async (req, res) => {
   }
 };
 
-// App端根据id获取游记
-// exports.getDiaryById = async (req, res) => {
-//   try {
-//     console.log(req.body);
-//     const id = req.body.user_id;
-//     const diary = await TravelModel.find({ user_id: id });
-//     return res.send({
-//       status: 200,
-//       message: '查询成功',
-//       data: diary,
-//     });
-//   } catch (err) {
-//     console.log(err);
-//     return res.send({
-//       status: 400,
-//       message: '查询失败',
-//     });
-//   }
-// }
 exports.getDiaryById = async (req, res) => {
   try {
     const { user_id } = req.body;
@@ -282,8 +256,6 @@ exports.checkDiary = async (req, res) => {
 // web端逻辑删除
 exports.deleteDiary = async (req, res) => {
   try {
-
-    console.log("我是删除",req);
     const _id = req.body.id;
     const diary = await TravelModel.findById(_id);
     if (!diary) {

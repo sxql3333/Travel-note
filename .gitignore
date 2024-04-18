@@ -7,3 +7,4 @@ TravelApp/node_modules
 dist/
 npm-debug.log
 server/assets
+node_modules

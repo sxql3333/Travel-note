@@ -15,7 +15,7 @@ router.post('/app/register', login.appRegister)
 router.post('/app/getDataByName', travel.getDataByName)
 router.post('/app/addDiary', travel.addDiary)
 router.post('/app/getPersonalDiary', travel.getDiaryById)
-router.post('/app/getAllDiary', travel.getAllDiary)
+router.post('/app/getMoreDiary', travel.getMoreDiary)
 router.post('/app/updateInfo', login.updateInfo)
 router.post('/app/updatePwd', login.updatePwd)
 

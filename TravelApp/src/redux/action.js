@@ -10,3 +10,7 @@ export const savePersonalNotes = (notes) => ({
   type: 'SAVE_PERSONAL_NOTES',
   payload: notes,
 })
+export const setMoreDiary = (diary) => ({
+  type: 'SET_MORE_DIARY',
+  payload: diary,
+})

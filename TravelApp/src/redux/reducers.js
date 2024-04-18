@@ -3,6 +3,7 @@ const initialState = {
   searchResults: [],
   userInfo: null,
   personalNotes: [],
+  moreDiary: [],
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -12,6 +13,11 @@ const rootReducer = (state = initialState, action) => {
       return {
         ...state,
         searchResults: action.payload,
+      };
+    case 'SET_MORE_DIARY':
+      return {
+        ...state,
+        moreDiary: [...state.moreDiary, ...action.payload], // 将 payload 追加到 moreDiary 数组中
       };
     case 'SAVE_USER_INFO':
       return {
